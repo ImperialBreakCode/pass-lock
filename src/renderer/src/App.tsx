@@ -1,5 +1,11 @@
+import { Calendar } from './components/ui/calendar'
+
 function App(): JSX.Element {
-	return <h1>hello</h1>
+	return (
+		<div className="dark">
+			<Calendar />
+		</div>
+	)
 }
 
 export default App
