@@ -1,20 +1,18 @@
-import { useState } from 'react'
-import { Calendar } from './components/ui/calendar'
 import { ThemeProvider } from './components/ThemeProvider'
+import { HashRouter, Route, Routes } from 'react-router-dom'
+import BaseLayout from './layouts/baseLayout'
+import StatusPage from './pages/StatusPage'
 
 function App(): JSX.Element {
-	const [versions] = useState(window.electron.process.versions)
-
 	return (
 		<ThemeProvider>
-			<div className="bg-background text-foreground">
-				<Calendar mode="default" className="rounded-md border" />
-				<ul className="versions">
-					<li>Electron v{versions.electron}</li>
-					<li>Chromium v{versions.chrome}</li>
-					<li>Node v{versions.node}</li>
-				</ul>
-			</div>
+			<HashRouter>
+				<Routes>
+					<Route path="/" element={<BaseLayout />}>
+						<Route index element={<StatusPage />} />
+					</Route>
+				</Routes>
+			</HashRouter>
 		</ThemeProvider>
 	)
 }
