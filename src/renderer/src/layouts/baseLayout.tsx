@@ -7,7 +7,7 @@ function BaseLayout() {
 			<div className="h-full max-w-[30%]">
 				<NavMenu />
 			</div>
-			<div className="h-full">
+			<div className="h-full me-auto">
 				<Outlet />
 			</div>
 		</div>
