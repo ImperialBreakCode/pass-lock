@@ -12,7 +12,7 @@ function AppNavLink({ children, to }: AppNavLinkProps) {
 			{({ isActive }) => (
 				<Button
 					variant={isActive ? 'default' : 'ghost'}
-					className="w-full text-left justify-start"
+					className={`w-full text-left justify-start ${isActive ? '' : 'text-muted-foreground'}`}
 				>
 					{children}
 				</Button>
