@@ -8,7 +8,7 @@ interface AppNavLinkProps {
 
 function AppNavLink({ children, to }: AppNavLinkProps) {
 	return (
-		<NavLink to={to} className={'my-2'}>
+		<NavLink to={to} className={'my-1'}>
 			{({ isActive }) => (
 				<Button
 					variant={isActive ? 'default' : 'ghost'}
