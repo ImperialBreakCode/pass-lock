@@ -15,7 +15,7 @@ function NavMenu() {
 					<AppNavLink to={routes.status}>
 						<Shield className="inline w-5" /> <span className="pl-3">Status</span>
 					</AppNavLink>
-					<AppNavLink to={routes.passVault}>
+					<AppNavLink to={routes.vault}>
 						<Vault className="inline w-5" />{' '}
 						<span className="pl-3">Password vault</span>
 					</AppNavLink>

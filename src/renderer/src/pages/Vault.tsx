@@ -1,19 +1,20 @@
-import ServiceButton from '@/components/passVault/ServiceButton'
-import ServiceControl from '@/components/passVault/ServiceControl'
+import ServiceButton from '@/components/vault/ServiceButton'
+import ServiceControl from '@/components/vault/ServiceControl'
 import { ScrollArea } from '@/components/ui/scroll-area'
-import PageHeading from '@/elements/PageHeading'
+import PageHeader from '@/elements/PageHeader'
 import PageWrapper from '@/elements/PageWrapper'
+import { routes } from '@/routes'
 
-function PassVault() {
+function Vault() {
 	return (
 		<PageWrapper>
-			<PageHeading>Password vault</PageHeading>
+			<PageHeader pageTitle="Password vault" />
 
 			<ScrollArea className="flex-auto px-5">
 				<ServiceControl onAddService={() => {}} />
 
 				<div className="pb-4">
-					<ServiceButton link={'#'}>Instagram</ServiceButton>
+					<ServiceButton link={routes.accountInfos}>Instagram</ServiceButton>
 					<ServiceButton link={'#'}>Instagram</ServiceButton>
 					<ServiceButton link={'#'}>Instagram</ServiceButton>
 					<ServiceButton link={'#'}>Instagram</ServiceButton>
@@ -27,4 +28,4 @@ function PassVault() {
 	)
 }
 
-export default PassVault
+export default Vault

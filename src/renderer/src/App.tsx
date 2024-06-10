@@ -3,7 +3,8 @@ import { HashRouter, Route, Routes } from 'react-router-dom'
 import BaseLayout from './layouts/baseLayout'
 import StatusPage from './pages/StatusPage'
 import { routes } from './routes'
-import PassVault from './pages/PassVault'
+import Vault from './pages/Vault'
+import AccountInfos from './pages/AccountInfos'
 
 function App(): JSX.Element {
 	return (
@@ -12,7 +13,10 @@ function App(): JSX.Element {
 				<Routes>
 					<Route path={routes.baseRoute} element={<BaseLayout />}>
 						<Route index element={<StatusPage />} />
-						<Route path={routes.passVault} element={<PassVault />} />
+						<Route path={routes.vault}>
+							<Route index element={<Vault />} />
+							<Route path={routes.accountInfos} element={<AccountInfos />} />
+						</Route>
 					</Route>
 				</Routes>
 			</HashRouter>

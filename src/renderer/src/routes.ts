@@ -1,5 +1,6 @@
 export const routes = {
 	baseRoute: '/',
 	status: '/',
-	passVault: '/vault'
+	vault: '/vault',
+	accountInfos: 'accountInfos'
 }
