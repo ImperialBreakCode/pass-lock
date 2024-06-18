@@ -3,8 +3,9 @@ import IFileDataStorage from '../../abstraction/fileStorage/fileDataStorage.inte
 import path from 'path'
 import { existsSync } from 'fs'
 
-class JsonFileStorage<TData> implements IFileDataStorage<TData> {
+abstract class JsonFileStorage<TData> implements IFileDataStorage<TData> {
 	private readonly fileName: string = 'data.json'
+	protected abstract readonly initialData: TData
 
 	constructor(
 		private readonly filePath: string,
@@ -38,7 +39,7 @@ class JsonFileStorage<TData> implements IFileDataStorage<TData> {
 		}
 
 		if (!existsSync(this.fullFilePathAndName)) {
-			await writeFile(this.fullFilePathAndName, JSON.stringify([]))
+			await writeFile(this.fullFilePathAndName, JSON.stringify(this.initialData))
 		}
 	}
 }
