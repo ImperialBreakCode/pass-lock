@@ -1,4 +1,4 @@
-import AccountInfo from './AccountInfo.type'
+import AccountInfo from './accountInfo.type'
 
 type ServiceInfo = {
 	id: string

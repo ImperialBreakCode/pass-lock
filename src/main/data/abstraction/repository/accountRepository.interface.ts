@@ -1,4 +1,4 @@
-import AccountInfo from '../../models/AccountInfo.type'
+import AccountInfo from '../../models/accountInfo.type'
 
 interface IAccountRepository {
 	getAllInService: (serviceId: string) => Promise<AccountInfo[]>

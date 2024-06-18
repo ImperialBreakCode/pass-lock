@@ -1,8 +1,8 @@
 import IFileStorageFactory from '../../abstraction/factories/fileStorageFactory.interface'
 import IFileDataStorage from '../../abstraction/fileStorage/fileDataStorage.interface'
 import IAccountRepository from '../../abstraction/repository/accountRepository.interface'
-import AccountInfo from '../../models/AccountInfo.type'
 import ServiceInfo from '../../models/ServiceInfo.type'
+import AccountInfo from '../../models/accountInfo.type'
 
 class AccountRepository implements IAccountRepository {
 	private readonly passwordStorage: IFileDataStorage<ServiceInfo[]>

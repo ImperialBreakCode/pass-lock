@@ -1,4 +1,4 @@
-import ServiceInfo from '../../models/ServiceInfo.type'
+import ServiceInfo from '../../models/serviceInfo.type'
 import JsonFileStorage from './jsonFileStorage'
 
 class PasswordStorage extends JsonFileStorage<ServiceInfo[]> {
