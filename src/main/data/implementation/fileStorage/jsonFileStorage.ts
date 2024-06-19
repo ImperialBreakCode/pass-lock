@@ -21,26 +21,33 @@ abstract class JsonFileStorage<TData> implements IFileDataStorage<TData> {
 	}
 
 	public async readData(): Promise<TData> {
-		await this.ensureStorage()
-
 		const smth = await readFile(this.fullFilePathAndName, 'utf8')
-
 		return JSON.parse(smth) as TData
 	}
 
 	public async save(data: TData): Promise<void> {
-		await this.ensureStorage()
 		return await writeFile(this.fullFilePathAndName, JSON.stringify(data))
 	}
 
-	public async ensureStorage(): Promise<void> {
-		if (!existsSync(this.fullPath)) {
+	public async ensureStorage(): Promise<boolean> {
+		//let storageNotCreated = await this.ensureDir()
+		const storageNotCreated = !existsSync(this.fullFilePathAndName)
+
+		if (storageNotCreated) {
+			await writeFile(this.fullFilePathAndName, JSON.stringify(this.initialData))
+		}
+
+		return storageNotCreated
+	}
+
+	protected async ensureDir(): Promise<boolean> {
+		const dirNotCreated = !existsSync(this.fullPath)
+
+		if (dirNotCreated) {
 			await mkdir(this.fullPath)
 		}
 
-		if (!existsSync(this.fullFilePathAndName)) {
-			await writeFile(this.fullFilePathAndName, JSON.stringify(this.initialData))
-		}
+		return dirNotCreated
 	}
 }
 
