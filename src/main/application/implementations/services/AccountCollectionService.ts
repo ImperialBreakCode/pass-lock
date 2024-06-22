@@ -1,6 +1,6 @@
 import IModelFactory from '../../../data/abstraction/factories/modelFactory.interface'
 import IServiceRepository from '../../../data/abstraction/repository/serviceRepository.interface'
-import ServiceInfo from '../../../data/models/ServiceInfo.type'
+import ServiceInfo from '../../../data/models/serviceInfo.type'
 import IAccountCollectionService from '../../abstractions/services/AccountCollectionService.interface'
 
 class AccountCollectionService implements IAccountCollectionService {

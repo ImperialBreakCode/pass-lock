@@ -1,4 +1,4 @@
-import ServiceInfo from '../../../data/models/ServiceInfo.type'
+import ServiceInfo from '../../../data/models/serviceInfo.type'
 
 interface IAccountCollectionService {
 	getAll: () => Promise<ServiceInfo[]>
