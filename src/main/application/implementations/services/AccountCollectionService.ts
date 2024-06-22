@@ -1,21 +1,28 @@
 import IModelFactory from '../../../data/abstraction/factories/modelFactory.interface'
 import IServiceRepository from '../../../data/abstraction/repository/serviceRepository.interface'
 import ServiceInfo from '../../../data/models/serviceInfo.type'
+import IAccountEncryption from '../../abstractions/encryption/accountEncryption.interface'
 import IAccountCollectionService from '../../abstractions/services/AccountCollectionService.interface'
 
 class AccountCollectionService implements IAccountCollectionService {
 	constructor(
 		private readonly accountCollectionRepo: IServiceRepository,
-		private readonly modelFactory: IModelFactory
+		private readonly modelFactory: IModelFactory,
+		private readonly accountEncryptor: IAccountEncryption
 	) {}
 
 	public async getAll(): Promise<ServiceInfo[]> {
 		return await this.accountCollectionRepo.getAll()
 	}
 
-	// decrypt
 	public async getOne(serviceId: string): Promise<ServiceInfo | undefined> {
-		return await this.accountCollectionRepo.getOne(serviceId)
+		const service = await this.accountCollectionRepo.getOne(serviceId)
+
+		if (service) {
+			await this.accountEncryptor.decryptMultipleAccounts(service.accounts)
+		}
+
+		return service
 	}
 
 	public async insertOne(serviceName: string): Promise<string | void> {
