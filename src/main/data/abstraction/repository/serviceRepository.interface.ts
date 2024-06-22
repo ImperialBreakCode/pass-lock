@@ -1,4 +1,4 @@
-import ServiceInfo from '../../models/serviceInfo.type'
+import ServiceInfo from '../../models/ServiceInfo.type'
 
 interface IServiceRepository {
 	getAll: () => Promise<ServiceInfo[]>

@@ -2,6 +2,14 @@ import IEncryption from '../abstractions/encryption.interface'
 import { createCipheriv, createDecipheriv, createHmac, randomBytes } from 'crypto'
 
 class Encrypton implements IEncryption {
+	public generateKey(): string {
+		return randomBytes(32).toString('hex')
+	}
+
+	public generateHmacSecret(): string {
+		return randomBytes(64).toString('hex')
+	}
+
 	public encrypt(data: string, key: string, hmacSecret: string): string {
 		const iv = randomBytes(16)
 		const chipher = createCipheriv('aes-256-cbc', key, iv)
