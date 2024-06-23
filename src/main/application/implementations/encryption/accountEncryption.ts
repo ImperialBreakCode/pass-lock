@@ -37,7 +37,7 @@ class AccountEncryption implements IAccountEncryption {
 			account.username = action(account.username)
 			account.password = action(account.password)
 			account.moreInfo = action(account.moreInfo)
-		} else {
+		} else if (action === this.encryptor.encrypt) {
 			throw new Error('No encryption keys found')
 		}
 	}

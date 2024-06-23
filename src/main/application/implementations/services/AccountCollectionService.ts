@@ -2,7 +2,7 @@ import IModelFactory from '../../../data/abstraction/factories/modelFactory.inte
 import IServiceRepository from '../../../data/abstraction/repository/serviceRepository.interface'
 import ServiceInfo from '../../../data/models/serviceInfo.type'
 import IAccountEncryption from '../../abstractions/encryption/accountEncryption.interface'
-import IAccountCollectionService from '../../abstractions/services/AccountCollectionService.interface'
+import IAccountCollectionService from '../../abstractions/services/accountCollectionService.interface'
 
 class AccountCollectionService implements IAccountCollectionService {
 	constructor(

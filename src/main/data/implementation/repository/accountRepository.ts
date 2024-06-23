@@ -1,7 +1,7 @@
 import IFileStorageFactory from '../../abstraction/factories/fileStorageFactory.interface'
 import IFileDataStorage from '../../abstraction/fileStorage/fileDataStorage.interface'
 import IAccountRepository from '../../abstraction/repository/accountRepository.interface'
-import ServiceInfo from '../../models/ServiceInfo.type'
+import ServiceInfo from '../../models/serviceInfo.type'
 import AccountInfo from '../../models/accountInfo.type'
 
 class AccountRepository implements IAccountRepository {
@@ -9,6 +9,16 @@ class AccountRepository implements IAccountRepository {
 
 	constructor(storageFactory: IFileStorageFactory) {
 		this.passwordStorage = storageFactory.createPasswordFileStorage()
+	}
+
+	public async getFirst(): Promise<AccountInfo | undefined> {
+		const data = await this.passwordStorage.readData()
+
+		if (data.length > 0 && data[0].accounts.length > 0) {
+			return data[0].accounts[0]
+		}
+
+		return undefined
 	}
 
 	public async getAllInService(serviceId: string): Promise<AccountInfo[]> {
