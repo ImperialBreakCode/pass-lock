@@ -30,7 +30,7 @@ class AccountInfoService implements IAccountInfoService {
 
 	public async insertOneAccount(account: InsertAccount): Promise<string | void> {
 		const testDecryption = await this.accountInfoRepo.getFirst()
-		const testResult = await this.testEncyrption(testDecryption)
+		const testResult = await this.testDecryption(testDecryption)
 		if (testResult) {
 			return testResult
 		}
@@ -41,7 +41,10 @@ class AccountInfoService implements IAccountInfoService {
 			account.moreInfo
 		)
 
-		await this.encryptor.encryptSingleAccount(newAccount)
+		const encryptionResult = await this.tryEncyrptData(newAccount)
+		if (encryptionResult) {
+			return encryptionResult
+		}
 
 		const isInserted = await this.accountInfoRepo.insertOne(account.serviceId, newAccount)
 
@@ -57,12 +60,15 @@ class AccountInfoService implements IAccountInfoService {
 			return 'Account does not exist.'
 		}
 
-		const testResult = await this.testEncyrption(accountForUpdate)
+		const testResult = await this.testDecryption(accountForUpdate)
 		if (testResult) {
 			return testResult
 		}
 
-		await this.encryptor.encryptSingleAccount(account)
+		const encryptionResult = await this.tryEncyrptData(account)
+		if (encryptionResult) {
+			return encryptionResult
+		}
 
 		const isUpdated = await this.accountInfoRepo.updateOne(serviceId, account)
 		if (!isUpdated) {
@@ -78,7 +84,7 @@ class AccountInfoService implements IAccountInfoService {
 		}
 	}
 
-	private async testEncyrption(testDecryption: AccountInfo | undefined): Promise<string | void> {
+	private async testDecryption(testDecryption: AccountInfo | undefined): Promise<string | void> {
 		try {
 			if (testDecryption) {
 				await this.encryptor.decryptSingleAccount(testDecryption)
@@ -89,6 +95,14 @@ class AccountInfoService implements IAccountInfoService {
 			}
 
 			return encryptionMessages.invalidKeys
+		}
+	}
+
+	private async tryEncyrptData(account: AccountInfo): Promise<string | void> {
+		try {
+			await this.encryptor.encryptSingleAccount(account)
+		} catch {
+			return encryptionMessages.noEncryptionKeysFound
 		}
 	}
 }
