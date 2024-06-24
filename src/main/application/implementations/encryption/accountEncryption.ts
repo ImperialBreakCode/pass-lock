@@ -1,4 +1,4 @@
-import IKeyManager from '../../../data/abstraction/keyManager.interface'
+import IKeyManager from '../../../data/abstraction/managers/keyManager.interface'
 import AccountInfo from '../../../data/models/accountInfo.type'
 import IAccountEncryption from '../../abstractions/encryption/accountEncryption.interface'
 import IEncryption from '../../abstractions/encryption/encryption.interface'

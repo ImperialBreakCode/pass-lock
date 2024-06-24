@@ -1,14 +1,9 @@
-import IFileStorageFactory from '../../abstraction/factories/fileStorageFactory.interface'
-import IFileDataStorage from '../../abstraction/fileStorage/fileDataStorage.interface'
+import IPasswordStorage from '../../abstraction/fileStorage/passwordStorage.interface'
 import IServiceRepository from '../../abstraction/repository/serviceRepository.interface'
 import ServiceInfo from '../../models/serviceInfo.type'
 
 class ServiceRepository implements IServiceRepository {
-	private readonly passwordStorage: IFileDataStorage<ServiceInfo[]>
-
-	constructor(storageFactory: IFileStorageFactory) {
-		this.passwordStorage = storageFactory.createPasswordFileStorage()
-	}
+	constructor(private readonly passwordStorage: IPasswordStorage) {}
 
 	public async getAll(): Promise<ServiceInfo[]> {
 		return await this.passwordStorage.readData()

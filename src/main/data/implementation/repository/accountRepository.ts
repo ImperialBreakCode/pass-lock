@@ -1,15 +1,9 @@
-import IFileStorageFactory from '../../abstraction/factories/fileStorageFactory.interface'
-import IFileDataStorage from '../../abstraction/fileStorage/fileDataStorage.interface'
 import IAccountRepository from '../../abstraction/repository/accountRepository.interface'
-import ServiceInfo from '../../models/serviceInfo.type'
 import AccountInfo from '../../models/accountInfo.type'
+import IPasswordStorage from '../../abstraction/fileStorage/passwordStorage.interface'
 
 class AccountRepository implements IAccountRepository {
-	private readonly passwordStorage: IFileDataStorage<ServiceInfo[]>
-
-	constructor(storageFactory: IFileStorageFactory) {
-		this.passwordStorage = storageFactory.createPasswordFileStorage()
-	}
+	constructor(private readonly passwordStorage: IPasswordStorage) {}
 
 	public async getFirst(): Promise<AccountInfo | undefined> {
 		const data = await this.passwordStorage.readData()

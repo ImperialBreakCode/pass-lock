@@ -1,4 +1,4 @@
-import EncyrptionKeys from '../models/encryptionKeys.type'
+import EncyrptionKeys from '../../models/encryptionKeys.type'
 
 interface IKeyManager {
 	getKeys(): Promise<EncyrptionKeys>

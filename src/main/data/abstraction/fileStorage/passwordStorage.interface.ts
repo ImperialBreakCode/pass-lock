@@ -1,4 +1,4 @@
-import ServiceInfo from '../../models/ServiceInfo.type'
+import ServiceInfo from '../../models/serviceInfo.type'
 import IFileDataStorage from './fileDataStorage.interface'
 import IPasswordStorageObserver from './passwordStorageObserver.interface'
 

@@ -1,7 +1,7 @@
-import IFileStorageFactory from '../abstraction/factories/fileStorageFactory.interface'
-import IEncryptionKeysStorage from '../abstraction/fileStorage/encryptionKeysStorage.interface'
-import IKeyManager from '../abstraction/keyManager.interface'
-import EncyrptionKeys from '../models/encryptionKeys.type'
+import IFileStorageFactory from '../../abstraction/factories/fileStorageFactory.interface'
+import IEncryptionKeysStorage from '../../abstraction/fileStorage/encryptionKeysStorage.interface'
+import IKeyManager from '../../abstraction/managers/keyManager.interface'
+import EncyrptionKeys from '../../models/encryptionKeys.type'
 
 class KeyManager implements IKeyManager {
 	private readonly keyStorage: IEncryptionKeysStorage
