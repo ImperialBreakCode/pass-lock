@@ -17,7 +17,7 @@ class EncryptionKeysStorage
 	}
 
 	public override async save(data: EncyrptionKeys): Promise<void> {
-		await this.ensureDir()
+		await this.ensureStorage()
 		return await super.save(data)
 	}
 

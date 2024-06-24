@@ -1,4 +1,4 @@
-import IEncryptionKeysStorage from '../../../data/abstraction/fileStorage/encryptionKeysStorage.interface'
+import IKeyManager from '../../../data/abstraction/keyManager.interface'
 import AccountInfo from '../../../data/models/accountInfo.type'
 import IAccountEncryption from '../../abstractions/encryption/accountEncryption.interface'
 import IEncryption from '../../abstractions/encryption/encryption.interface'
@@ -8,7 +8,7 @@ import { EncryptonError } from './encryption'
 class AccountEncryption implements IAccountEncryption {
 	constructor(
 		private readonly encryptor: IEncryption,
-		private readonly encryptionKeysStorage: IEncryptionKeysStorage
+		private readonly encryptionKeysManager: IKeyManager
 	) {}
 
 	public async encryptSingleAccount(account: AccountInfo): Promise<void> {
@@ -26,7 +26,7 @@ class AccountEncryption implements IAccountEncryption {
 	}
 
 	public async decryptMultipleAccounts(accounts: AccountInfo[]): Promise<void> {
-		if (!this.encryptionKeysStorage.checkIfFileExists()) {
+		if (!this.encryptionKeysManager.checkIfFileExists()) {
 			return
 		}
 
@@ -36,8 +36,8 @@ class AccountEncryption implements IAccountEncryption {
 	}
 
 	private async accountCipherAction(account: AccountInfo, action: (data: string) => string) {
-		if (this.encryptionKeysStorage.checkIfFileExists()) {
-			const keys = await this.encryptionKeysStorage.readData()
+		if (this.encryptionKeysManager.checkIfFileExists()) {
+			const keys = await this.encryptionKeysManager.getKeys()
 			this.encryptor.setKeys(keys.encryptionKey, keys.hmacKey)
 
 			account.username = action(account.username)
