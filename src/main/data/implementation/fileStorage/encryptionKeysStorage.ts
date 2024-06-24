@@ -12,6 +12,10 @@ class EncryptionKeysStorage
 		encryptionKey: ''
 	}
 
+	public async ensureDirectory(): Promise<boolean> {
+		return await this.ensureDir()
+	}
+
 	public checkIfFileExists(): boolean {
 		return existsSync(this.fullFilePathAndName)
 	}

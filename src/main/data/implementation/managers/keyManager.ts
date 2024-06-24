@@ -10,6 +10,10 @@ class KeyManager implements IKeyManager {
 		this.keyStorage = storageFactory.createEncryptionKeysFileStorage()
 	}
 
+	public async ensureDir(): Promise<void> {
+		await this.keyStorage.ensureDirectory()
+	}
+
 	public async getKeys(): Promise<EncyrptionKeys> {
 		return await this.keyStorage.readData()
 	}
