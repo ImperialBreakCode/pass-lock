@@ -1,6 +1,7 @@
 import IModelFactory from '../../abstraction/factories/modelFactory.interface'
 import AccountInfo from '../../models/accountInfo.type'
-import ServiceInfo from '../../models/ServiceInfo.type'
+import EncyrptionKeys from '../../models/encryptionKeys.type'
+import ServiceInfo from '../../models/serviceInfo.type'
 
 class ModelFactory implements IModelFactory {
 	public createAccount(username: string, password: string, moreInfo: string): AccountInfo {
@@ -17,6 +18,13 @@ class ModelFactory implements IModelFactory {
 			id: crypto.randomUUID(),
 			name: serviceName,
 			accounts: []
+		}
+	}
+
+	public createKeys(key: string, hmacSecret: string): EncyrptionKeys {
+		return {
+			encryptionKey: key,
+			hmacKey: hmacSecret
 		}
 	}
 }

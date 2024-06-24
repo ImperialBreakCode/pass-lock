@@ -1,11 +1,22 @@
+import IModelFactory from '../../data/abstraction/factories/modelFactory.interface'
 import IPasswordStorageObserver from '../../data/abstraction/fileStorage/passwordStorageObserver.interface'
 import IKeyManager from '../../data/abstraction/managers/keyManager.interface'
+import IEncryption from '../abstractions/encryption/encryption.interface'
 
 class PasswordStorageObserver implements IPasswordStorageObserver {
-	constructor(private readonly keyManager: IKeyManager) {}
+	constructor(
+		private readonly keyManager: IKeyManager,
+		private readonly encyrptor: IEncryption,
+		private readonly modelFactory: IModelFactory
+	) {}
 
-	passwordStorageCreated(): Promise<void> {
-		throw new Error('Method not implemented.')
+	public async passwordStorageCreated(): Promise<void> {
+		const keys = this.modelFactory.createKeys(
+			this.encyrptor.generateKey(),
+			this.encyrptor.generateHmacSecret()
+		)
+
+		this.keyManager.saveKeys(keys)
 	}
 }
 
