@@ -29,20 +29,13 @@ class AccountInfoService implements IAccountInfoService {
 	}
 
 	public async insertOneAccount(account: InsertAccount): Promise<string | void> {
-		try {
-			const testDecryption = await this.accountInfoRepo.getFirst()
-			if (testDecryption) {
-				await this.encryptor.decryptSingleAccount(testDecryption)
-			}
-		} catch (error) {
-			if (error instanceof EncryptonError) {
-				return error.message
-			}
-
-			return encryptionMessages.invalidKeys
+		const testDecryption = await this.accountInfoRepo.getFirst()
+		const testResult = await this.testEncyrption(testDecryption)
+		if (testResult) {
+			return testResult
 		}
 
-		const newAccount = await this.modelFactory.createAccount(
+		const newAccount = this.modelFactory.createAccount(
 			account.username,
 			account.password,
 			account.moreInfo
@@ -64,14 +57,9 @@ class AccountInfoService implements IAccountInfoService {
 			return 'Account does not exist.'
 		}
 
-		try {
-			await this.encryptor.decryptSingleAccount(accountForUpdate)
-		} catch (error) {
-			if (error instanceof EncryptonError) {
-				return error.message
-			}
-
-			return encryptionMessages.invalidKeys
+		const testResult = await this.testEncyrption(accountForUpdate)
+		if (testResult) {
+			return testResult
 		}
 
 		await this.encryptor.encryptSingleAccount(account)
@@ -87,6 +75,20 @@ class AccountInfoService implements IAccountInfoService {
 
 		if (!isDeleted) {
 			return 'Could not delete account.'
+		}
+	}
+
+	private async testEncyrption(testDecryption: AccountInfo | undefined): Promise<string | void> {
+		try {
+			if (testDecryption) {
+				await this.encryptor.decryptSingleAccount(testDecryption)
+			}
+		} catch (error) {
+			if (error instanceof EncryptonError) {
+				return error.message
+			}
+
+			return encryptionMessages.invalidKeys
 		}
 	}
 }

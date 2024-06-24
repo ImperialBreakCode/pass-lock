@@ -2,6 +2,8 @@ import IEncryptionKeysStorage from '../../../data/abstraction/fileStorage/encryp
 import AccountInfo from '../../../data/models/accountInfo.type'
 import IAccountEncryption from '../../abstractions/encryption/accountEncryption.interface'
 import IEncryption from '../../abstractions/encryption/encryption.interface'
+import { encryptionMessages } from '../constants/messages'
+import { EncryptonError } from './encryption'
 
 class AccountEncryption implements IAccountEncryption {
 	constructor(
@@ -24,6 +26,10 @@ class AccountEncryption implements IAccountEncryption {
 	}
 
 	public async decryptMultipleAccounts(accounts: AccountInfo[]): Promise<void> {
+		if (!this.encryptionKeysStorage.checkIfFileExists()) {
+			return
+		}
+
 		for (let i = 0; i < accounts.length; i++) {
 			await this.decryptSingleAccount(accounts[i])
 		}
@@ -38,7 +44,7 @@ class AccountEncryption implements IAccountEncryption {
 			account.password = action(account.password)
 			account.moreInfo = action(account.moreInfo)
 		} else if (action === this.encryptor.encrypt) {
-			throw new Error('No encryption keys found')
+			throw new EncryptonError(encryptionMessages.noEncryptionKeysFound)
 		}
 	}
 }
