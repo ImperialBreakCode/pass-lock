@@ -10,12 +10,17 @@ class StartupManager implements IStartupManager {
 		private readonly keyManager: IKeyManager
 	) {}
 
-	public async ensureStorages(): Promise<void> {
+	public async init(): Promise<void> {
+		this.connectPasswordStorageObserver()
+		await this.ensureStorages()
+	}
+
+	private async ensureStorages(): Promise<void> {
 		this.passwordManager.ensureStorage()
 		this.keyManager.ensureDir()
 	}
 
-	public connectPasswordStorageObserver(): void {
+	private connectPasswordStorageObserver(): void {
 		this.passwordManager.attach(this.passwordStorageObserver)
 	}
 }

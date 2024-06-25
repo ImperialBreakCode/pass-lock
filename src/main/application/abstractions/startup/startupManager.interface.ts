@@ -1,6 +1,5 @@
 interface IStartupManager {
-	ensureStorages(): Promise<void>
-	connectPasswordStorageObserver(): void
+	init(): Promise<void>
 }
 
 export default IStartupManager
