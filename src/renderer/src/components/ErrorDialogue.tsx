@@ -1,7 +1,6 @@
 import { useContext } from 'react'
 import {
 	AlertDialog,
-	AlertDialogCancel,
 	AlertDialogContent,
 	AlertDialogDescription,
 	AlertDialogFooter,
@@ -9,6 +8,7 @@ import {
 	AlertDialogTitle
 } from './ui/alert-dialog'
 import { ErrorDialogueContext } from '@/contexts/ContextWrapper'
+import { Button } from './ui/button'
 
 function ErrorDialogue() {
 	const [message, setMessage] = useContext(ErrorDialogueContext)
@@ -21,9 +21,12 @@ function ErrorDialogue() {
 					<AlertDialogDescription>{message}</AlertDialogDescription>
 				</AlertDialogHeader>
 				<AlertDialogFooter>
-					<AlertDialogCancel onClick={() => (setMessage ? setMessage(null) : null)}>
+					<Button
+						variant={'outline'}
+						onClick={() => (setMessage ? setMessage(null) : null)}
+					>
 						Close
-					</AlertDialogCancel>
+					</Button>
 				</AlertDialogFooter>
 			</AlertDialogContent>
 		</AlertDialog>
