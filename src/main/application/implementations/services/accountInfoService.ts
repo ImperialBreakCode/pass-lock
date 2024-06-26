@@ -1,18 +1,23 @@
-import IModelFactory from '../../../data/abstraction/factories/modelFactory.interface'
-import IAccountRepository from '../../../data/abstraction/repository/accountRepository.interface'
+import { inject, injectable } from 'tsyringe'
+import type IModelFactory from '../../../data/abstraction/factories/modelFactory.interface'
+import type IAccountRepository from '../../../data/abstraction/repository/accountRepository.interface'
 import AccountInfo from '../../../data/models/accountInfo.type'
-import IAccountEncryption from '../../abstractions/encryption/accountEncryption.interface'
+import type IAccountEncryption from '../../abstractions/encryption/accountEncryption.interface'
 import IAccountInfoService, {
 	InsertAccount
 } from '../../abstractions/services/accountInfoService.interface'
 import { encryptionMessages } from '../constants/messages'
 import { EncryptonError } from '../encryption/encryption'
+import ModelFactory from '../../../data/implementation/factories/modelFactory'
+import AccountRepository from '../../../data/implementation/repository/accountRepository'
+import AccountEncryption from '../encryption/accountEncryption'
 
+@injectable()
 class AccountInfoService implements IAccountInfoService {
 	constructor(
-		private readonly modelFactory: IModelFactory,
-		private readonly accountInfoRepo: IAccountRepository,
-		private readonly encryptor: IAccountEncryption
+		@inject(ModelFactory) private readonly modelFactory: IModelFactory,
+		@inject(AccountRepository) private readonly accountInfoRepo: IAccountRepository,
+		@inject(AccountEncryption) private readonly encryptor: IAccountEncryption
 	) {}
 
 	public async getOneAccount(

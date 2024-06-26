@@ -1,14 +1,19 @@
-import IModelFactory from '../../../data/abstraction/factories/modelFactory.interface'
-import IServiceRepository from '../../../data/abstraction/repository/serviceRepository.interface'
+import { inject, injectable } from 'tsyringe'
+import type IModelFactory from '../../../data/abstraction/factories/modelFactory.interface'
+import type IServiceRepository from '../../../data/abstraction/repository/serviceRepository.interface'
 import ServiceInfo from '../../../data/models/serviceInfo.type'
-import IAccountEncryption from '../../abstractions/encryption/accountEncryption.interface'
+import type IAccountEncryption from '../../abstractions/encryption/accountEncryption.interface'
 import IAccountCollectionService from '../../abstractions/services/accountCollectionService.interface'
+import ServiceRepository from '../../../data/implementation/repository/serviceRepository'
+import ModelFactory from '../../../data/implementation/factories/modelFactory'
+import AccountEncryption from '../encryption/accountEncryption'
 
+@injectable()
 class AccountCollectionService implements IAccountCollectionService {
 	constructor(
-		private readonly accountCollectionRepo: IServiceRepository,
-		private readonly modelFactory: IModelFactory,
-		private readonly accountEncryptor: IAccountEncryption
+		@inject(ServiceRepository) private readonly accountCollectionRepo: IServiceRepository,
+		@inject(ModelFactory) private readonly modelFactory: IModelFactory,
+		@inject(AccountEncryption) private readonly accountEncryptor: IAccountEncryption
 	) {}
 
 	public async getAll(): Promise<ServiceInfo[]> {

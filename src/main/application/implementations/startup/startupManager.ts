@@ -1,13 +1,19 @@
-import IPasswordStorage from '../../../data/abstraction/fileStorage/passwordStorage.interface'
-import IPasswordStorageObserver from '../../../data/abstraction/fileStorage/passwordStorageObserver.interface'
-import IKeyManager from '../../../data/abstraction/managers/keyManager.interface'
+import { inject, injectable } from 'tsyringe'
+import type IPasswordStorage from '../../../data/abstraction/fileStorage/passwordStorage.interface'
+import type IPasswordStorageObserver from '../../../data/abstraction/fileStorage/passwordStorageObserver.interface'
+import type IKeyManager from '../../../data/abstraction/managers/keyManager.interface'
 import IStartupManager from '../../abstractions/startup/startupManager.interface'
+import PasswordStorageObserver from '../passwordStorageObserver'
+import PasswordManager from '../../../data/implementation/managers/passwordManager'
+import KeyManager from '../../../data/implementation/managers/keyManager'
 
+@injectable()
 class StartupManager implements IStartupManager {
 	constructor(
+		@inject(PasswordStorageObserver)
 		private readonly passwordStorageObserver: IPasswordStorageObserver,
-		private readonly passwordManager: IPasswordStorage,
-		private readonly keyManager: IKeyManager
+		@inject(PasswordManager) private readonly passwordManager: IPasswordStorage,
+		@inject(KeyManager) private readonly keyManager: IKeyManager
 	) {}
 
 	public async init(): Promise<void> {

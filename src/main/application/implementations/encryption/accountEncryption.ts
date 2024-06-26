@@ -1,14 +1,17 @@
-import IKeyManager from '../../../data/abstraction/managers/keyManager.interface'
+import { inject, injectable } from 'tsyringe'
+import type IKeyManager from '../../../data/abstraction/managers/keyManager.interface'
 import AccountInfo from '../../../data/models/accountInfo.type'
 import IAccountEncryption from '../../abstractions/encryption/accountEncryption.interface'
-import IEncryption from '../../abstractions/encryption/encryption.interface'
+import type IEncryption from '../../abstractions/encryption/encryption.interface'
 import { encryptionMessages } from '../constants/messages'
-import { EncryptonError } from './encryption'
+import Encrypton, { EncryptonError } from './encryption'
+import KeyManager from '../../../data/implementation/managers/keyManager'
 
+@injectable()
 class AccountEncryption implements IAccountEncryption {
 	constructor(
-		private readonly encryptor: IEncryption,
-		private readonly encryptionKeysManager: IKeyManager
+		@inject(Encrypton) private readonly encryptor: IEncryption,
+		@inject(KeyManager) private readonly encryptionKeysManager: IKeyManager
 	) {}
 
 	public async encryptSingleAccount(account: AccountInfo): Promise<void> {
