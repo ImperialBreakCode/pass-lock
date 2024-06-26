@@ -1,6 +1,6 @@
 import IPasswordStorage from '../../abstraction/fileStorage/passwordStorage.interface'
 import IPasswordStorageObserver from '../../abstraction/fileStorage/passwordStorageObserver.interface'
-import ServiceInfo from '../../models/ServiceInfo.type'
+import ServiceInfo from '../../models/serviceInfo.type'
 import JsonFileStorage from './jsonFileStorage'
 
 class PasswordStorage extends JsonFileStorage<ServiceInfo[]> implements IPasswordStorage {

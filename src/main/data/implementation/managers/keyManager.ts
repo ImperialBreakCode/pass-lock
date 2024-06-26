@@ -1,12 +1,15 @@
-import IFileStorageFactory from '../../abstraction/factories/fileStorageFactory.interface'
+import { inject, injectable } from 'tsyringe'
+import type IFileStorageFactory from '../../abstraction/factories/fileStorageFactory.interface'
 import IEncryptionKeysStorage from '../../abstraction/fileStorage/encryptionKeysStorage.interface'
 import IKeyManager from '../../abstraction/managers/keyManager.interface'
 import EncyrptionKeys from '../../models/encryptionKeys.type'
+import FileStorageFactory from '../factories/fileStorageFactory'
 
+@injectable()
 class KeyManager implements IKeyManager {
 	private readonly keyStorage: IEncryptionKeysStorage
 
-	constructor(storageFactory: IFileStorageFactory) {
+	constructor(@inject(FileStorageFactory) storageFactory: IFileStorageFactory) {
 		this.keyStorage = storageFactory.createEncryptionKeysFileStorage()
 	}
 

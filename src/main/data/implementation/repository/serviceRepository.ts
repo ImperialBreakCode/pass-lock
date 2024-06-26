@@ -1,9 +1,12 @@
-import IPasswordStorage from '../../abstraction/fileStorage/passwordStorage.interface'
+import { inject, injectable } from 'tsyringe'
+import type IPasswordStorage from '../../abstraction/fileStorage/passwordStorage.interface'
 import IServiceRepository from '../../abstraction/repository/serviceRepository.interface'
 import ServiceInfo from '../../models/serviceInfo.type'
+import PasswordManager from '../managers/passwordManager'
 
+@injectable()
 class ServiceRepository implements IServiceRepository {
-	constructor(private readonly passwordStorage: IPasswordStorage) {}
+	constructor(@inject(PasswordManager) private readonly passwordStorage: IPasswordStorage) {}
 
 	public async getAll(): Promise<ServiceInfo[]> {
 		return await this.passwordStorage.readData()

@@ -1,12 +1,15 @@
-import IFileStorageFactory from '../../abstraction/factories/fileStorageFactory.interface'
+import { inject, injectable } from 'tsyringe'
+import type IFileStorageFactory from '../../abstraction/factories/fileStorageFactory.interface'
 import IPasswordStorage from '../../abstraction/fileStorage/passwordStorage.interface'
 import IPasswordStorageObserver from '../../abstraction/fileStorage/passwordStorageObserver.interface'
 import ServiceInfo from '../../models/serviceInfo.type'
+import FileStorageFactory from '../factories/fileStorageFactory'
 
+@injectable()
 class PasswordManager implements IPasswordStorage {
 	private readonly passwordStorage: IPasswordStorage
 
-	constructor(storageFactory: IFileStorageFactory) {
+	constructor(@inject(FileStorageFactory) storageFactory: IFileStorageFactory) {
 		this.passwordStorage = storageFactory.createPasswordFileStorage()
 	}
 
