@@ -5,22 +5,25 @@ import StatusPage from './pages/StatusPage'
 import { routes } from './routes'
 import Vault from './pages/Vault'
 import AccountInfos from './pages/AccountInfos'
+import ContextWrapper from './contexts/ContextWrapper'
 
 function App(): JSX.Element {
 	return (
-		<ThemeProvider>
-			<HashRouter>
-				<Routes>
-					<Route path={routes.baseRoute} element={<BaseLayout />}>
-						<Route index element={<StatusPage />} />
-						<Route path={routes.vault}>
-							<Route index element={<Vault />} />
-							<Route path={routes.accountInfos} element={<AccountInfos />} />
+		<ContextWrapper>
+			<ThemeProvider>
+				<HashRouter>
+					<Routes>
+						<Route path={routes.baseRoute} element={<BaseLayout />}>
+							<Route index element={<StatusPage />} />
+							<Route path={routes.vault}>
+								<Route index element={<Vault />} />
+								<Route path={routes.accountInfos} element={<AccountInfos />} />
+							</Route>
 						</Route>
-					</Route>
-				</Routes>
-			</HashRouter>
-		</ThemeProvider>
+					</Routes>
+				</HashRouter>
+			</ThemeProvider>
+		</ContextWrapper>
 	)
 }
 
