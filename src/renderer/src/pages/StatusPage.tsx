@@ -18,13 +18,12 @@ function StatusPage() {
 	return (
 		<PageWrapper>
 			<PageHeader pageTitle="Status" />
-
 			<div className="mt-4">
 				<div className="mb-2">
 					<StatusCard />
 				</div>
 
-				<div>{isInital ?? <InitialCard />}</div>
+				<div>{isInital && <InitialCard />}</div>
 			</div>
 		</PageWrapper>
 	)

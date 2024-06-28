@@ -30,8 +30,8 @@ abstract class JsonFileStorage<TData> implements IFileDataStorage<TData> {
 	}
 
 	public async ensureStorage(): Promise<boolean> {
-		//let storageNotCreated = await this.ensureDir()
-		const storageNotCreated = !existsSync(this.fullFilePathAndName)
+		const storageNotCreated = await this.ensureDir()
+		//const storageNotCreated = !existsSync(this.fullFilePathAndName)
 
 		if (storageNotCreated) {
 			await writeFile(this.fullFilePathAndName, JSON.stringify(this.initialData))
