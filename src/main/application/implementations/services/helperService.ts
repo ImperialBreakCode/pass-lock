@@ -3,6 +3,7 @@ import type IKeyManager from '../../../data/abstraction/managers/keyManager.inte
 import KeyManager from '../../../data/implementation/managers/keyManager'
 import type IServiceRepository from '../../../data/abstraction/repository/serviceRepository.interface'
 import ServiceRepository from '../../../data/implementation/repository/serviceRepository'
+import IHelperService from '../../abstractions/services/helperService.interface'
 
 @injectable()
 class HelperService implements IHelperService {

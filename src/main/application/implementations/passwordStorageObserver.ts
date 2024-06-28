@@ -1,13 +1,18 @@
-import IModelFactory from '../../data/abstraction/factories/modelFactory.interface'
-import IPasswordStorageObserver from '../../data/abstraction/fileStorage/passwordStorageObserver.interface'
-import IKeyManager from '../../data/abstraction/managers/keyManager.interface'
-import IEncryption from '../abstractions/encryption/encryption.interface'
+import { inject, injectable } from 'tsyringe'
+import type IModelFactory from '../../data/abstraction/factories/modelFactory.interface'
+import type IPasswordStorageObserver from '../../data/abstraction/fileStorage/passwordStorageObserver.interface'
+import type IKeyManager from '../../data/abstraction/managers/keyManager.interface'
+import type IEncryption from '../abstractions/encryption/encryption.interface'
+import KeyManager from '../../data/implementation/managers/keyManager'
+import Encrypton from './encryption/encryption'
+import ModelFactory from '../../data/implementation/factories/modelFactory'
 
+@injectable()
 class PasswordStorageObserver implements IPasswordStorageObserver {
 	constructor(
-		private readonly keyManager: IKeyManager,
-		private readonly encyrptor: IEncryption,
-		private readonly modelFactory: IModelFactory
+		@inject(KeyManager) private readonly keyManager: IKeyManager,
+		@inject(Encrypton) private readonly encyrptor: IEncryption,
+		@inject(ModelFactory) private readonly modelFactory: IModelFactory
 	) {}
 
 	public async passwordStorageCreated(): Promise<void> {

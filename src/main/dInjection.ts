@@ -21,8 +21,8 @@ import IStartupManager from './application/abstractions/startup/startupManager.i
 import StartupManager from './application/implementations/startup/startupManager'
 import IPasswordStorageObserver from './data/abstraction/fileStorage/passwordStorageObserver.interface'
 import PasswordStorageObserver from './application/implementations/passwordStorageObserver'
-import 'reflect-metadata'
 import HelperService from './application/implementations/services/helperService'
+import IHelperService from './application/abstractions/services/helperService.interface'
 
 export function getDiContainer(): DependencyContainer {
 	// data layer
