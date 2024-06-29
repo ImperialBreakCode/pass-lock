@@ -4,24 +4,34 @@ import { ScrollArea } from '@/components/ui/scroll-area'
 import PageHeader from '@/elements/PageHeader'
 import PageWrapper from '@/elements/PageWrapper'
 import { routes } from '@/routes'
+import SideSheet from '@/components/SideSheet'
+import { useState } from 'react'
 
 function Vault() {
+	const [sideOpen, setSideOpen] = useState(false)
+
 	return (
 		<PageWrapper>
+			<SideSheet
+				open={sideOpen}
+				onOpenChange={(open) => setSideOpen(open)}
+				description="Add an account service (a collection of account infos) where you can safely store passwords and more information about your accounts"
+				title="Add an account service"
+			>
+				hello
+			</SideSheet>
+
 			<PageHeader pageTitle="Password vault" />
 
 			<ScrollArea className="flex-auto px-5">
-				<ServiceControl onAddService={() => {}} />
+				<ServiceControl
+					onAddService={() => {
+						setSideOpen(true)
+					}}
+				/>
 
 				<div className="pb-4">
 					<ServiceButton link={routes.accountInfos}>Instagram</ServiceButton>
-					<ServiceButton link={'#'}>Instagram</ServiceButton>
-					<ServiceButton link={'#'}>Instagram</ServiceButton>
-					<ServiceButton link={'#'}>Instagram</ServiceButton>
-					<ServiceButton link={'#'}>Instagram</ServiceButton>
-					<ServiceButton link={'#'}>Instagram</ServiceButton>
-					<ServiceButton link={'#'}>Instagram</ServiceButton>
-					<ServiceButton link={'#'}>Instagram</ServiceButton>
 				</div>
 			</ScrollArea>
 		</PageWrapper>
