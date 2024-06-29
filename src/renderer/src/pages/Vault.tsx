@@ -15,6 +15,11 @@ function Vault() {
 
 	const [sideOpen, setSideOpen] = useState(false)
 	const [services, setServices] = useState<ServiceInfo[]>([])
+	const [searchTerm, setSearchTerm] = useState('')
+
+	const filterData = (data: ServiceInfo[]) => {
+		return data.filter((d) => d.name.toLowerCase().includes(searchTerm.toLowerCase()))
+	}
 
 	const fetchData = async () => {
 		const result = await window.api.getAllServices()
@@ -50,13 +55,16 @@ function Vault() {
 
 			<ScrollArea className="flex-auto px-5">
 				<ServiceControl
+					onSearch={(e) => {
+						setSearchTerm(e.target.value)
+					}}
 					onAddService={() => {
 						setSideOpen(true)
 					}}
 				/>
 
 				<div className="pb-4">
-					{services.map((service) => (
+					{filterData(services).map((service) => (
 						<ServiceButton key={service.id} link={routes.accountInfos}>
 							{service.name}
 						</ServiceButton>
