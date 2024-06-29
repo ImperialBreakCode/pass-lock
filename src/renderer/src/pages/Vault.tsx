@@ -6,6 +6,7 @@ import PageWrapper from '@/elements/PageWrapper'
 import { routes } from '@/routes'
 import SideSheet from '@/components/SideSheet'
 import { useState } from 'react'
+import AddServiceForm from '@/components/vault/AddServiceForm'
 
 function Vault() {
 	const [sideOpen, setSideOpen] = useState(false)
@@ -18,7 +19,7 @@ function Vault() {
 				description="Add an account service (a collection of account infos) where you can safely store passwords and more information about your accounts"
 				title="Add an account service"
 			>
-				hello
+				<AddServiceForm />
 			</SideSheet>
 
 			<PageHeader pageTitle="Password vault" />
