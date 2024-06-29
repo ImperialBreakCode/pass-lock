@@ -6,10 +6,12 @@ import { useEffect, useState } from 'react'
 
 function StatusPage() {
 	const [isInital, setIsInital] = useState(false)
+	const [keysExist, setKeysExist] = useState(false)
 
 	useEffect(() => {
 		async function init() {
 			setIsInital(await window.api.checkForInitialState())
+			setKeysExist(window.api.checkForKeys())
 		}
 
 		init()
@@ -20,7 +22,7 @@ function StatusPage() {
 			<PageHeader pageTitle="Status" />
 			<div className="mt-4">
 				<div className="mb-2">
-					<StatusCard />
+					<StatusCard unlocked={keysExist} />
 				</div>
 
 				<div>{isInital && <InitialCard />}</div>

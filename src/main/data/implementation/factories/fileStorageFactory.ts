@@ -7,11 +7,13 @@ import PasswordStorage from '../fileStorage/passwordStorage'
 
 @injectable()
 class FileStorageFactory implements IFileStorageFactory {
+	private readonly storagePath: string = process.cwd()
+
 	public createEncryptionKeysFileStorage(): IEncryptionKeysStorage {
-		return new EncryptionKeysStorage(process.cwd(), 'encryptionKeys')
+		return new EncryptionKeysStorage(this.storagePath, 'encryptionKeys')
 	}
 	public createPasswordFileStorage(): IPasswordStorage {
-		return new PasswordStorage(process.cwd(), 'password')
+		return new PasswordStorage(this.storagePath, 'password')
 	}
 }
 

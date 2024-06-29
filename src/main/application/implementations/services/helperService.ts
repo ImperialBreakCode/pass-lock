@@ -12,6 +12,10 @@ class HelperService implements IHelperService {
 		@inject(ServiceRepository) private readonly serviceRepo: IServiceRepository
 	) {}
 
+	public checkForKeys(): boolean {
+		return this.keyManager.checkIfFileExists()
+	}
+
 	public async checkForInitialState(): Promise<boolean> {
 		const allData = await this.serviceRepo.getAll()
 

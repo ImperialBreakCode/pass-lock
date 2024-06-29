@@ -8,4 +8,10 @@ export function mapToIpc(ipcMain: IpcMain, container: DependencyContainer) {
 
 		return await helperService.checkForInitialState()
 	})
+
+	ipcMain.on('checkForKeys', (e) => {
+		const helperService = container.resolve(HelperService)
+
+		e.returnValue = helperService.checkForKeys()
+	})
 }

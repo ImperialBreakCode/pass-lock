@@ -5,8 +5,12 @@ const checkForInitialState = async (): Promise<boolean> => {
 	return await ipcRenderer.invoke('checkForInitialState')
 }
 
+const checkForKeys = (): boolean => {
+	return ipcRenderer.sendSync('checkForKeys')
+}
+
 // Custom APIs for renderer
-const api = { checkForInitialState }
+const api = { checkForInitialState, checkForKeys }
 
 // Use `contextBridge` APIs to expose Electron APIs to
 // renderer only if context isolation is enabled, otherwise
