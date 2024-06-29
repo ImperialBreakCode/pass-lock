@@ -5,12 +5,20 @@ import { Form, FormField } from '../ui/form'
 import { Input } from '../ui/input'
 import { Button } from '../ui/button'
 import FormInputWrapper from '@/elements/FormInputWrapper'
+import { useContext } from 'react'
+import { ErrorDialogueContext } from '@/contexts/ContextWrapper'
+
+interface AddServiceFormProps {
+	onSuccessfullSubmit: () => void
+}
 
 const formSchema = z.object({
 	name: z.string().min(1, { message: 'Name is required' }).max(50)
 })
 
-function AddServiceForm() {
+function AddServiceForm({ onSuccessfullSubmit }: AddServiceFormProps) {
+	const [, setErrors] = useContext(ErrorDialogueContext)
+
 	const form = useForm<z.infer<typeof formSchema>>({
 		resolver: zodResolver(formSchema),
 		defaultValues: {
@@ -19,8 +27,14 @@ function AddServiceForm() {
 		mode: 'onChange'
 	})
 
-	const onSubmit = (data: z.infer<typeof formSchema>) => {
-		console.log(data)
+	const onSubmit = async (data: z.infer<typeof formSchema>) => {
+		const result = await window.api.insertService(data.name)
+
+		if (typeof result === 'string' && setErrors) {
+			setErrors(result)
+		}
+
+		onSuccessfullSubmit()
 	}
 
 	return (
@@ -35,7 +49,7 @@ function AddServiceForm() {
 						</FormInputWrapper>
 					)}
 				/>
-				<Button type="submit">Submit</Button>
+				<Button type="submit">Add</Button>
 			</form>
 		</Form>
 	)

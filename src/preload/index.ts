@@ -1,5 +1,6 @@
 import { contextBridge, ipcRenderer } from 'electron'
 import { electronAPI } from '@electron-toolkit/preload'
+import ServiceInfo from '../main/data/models/serviceInfo.type'
 
 const checkForInitialState = async (): Promise<boolean> => {
 	return await ipcRenderer.invoke('checkForInitialState')
@@ -9,8 +10,16 @@ const checkForKeys = (): boolean => {
 	return ipcRenderer.sendSync('checkForKeys')
 }
 
+const getAllServices = async (): Promise<ServiceInfo[] | string> => {
+	return await ipcRenderer.invoke('getAllServices')
+}
+
+const insertService = async (serviceName: string): Promise<string | void> => {
+	return await ipcRenderer.invoke('addService', serviceName)
+}
+
 // Custom APIs for renderer
-const api = { checkForInitialState, checkForKeys }
+const api = { checkForInitialState, checkForKeys, getAllServices, insertService }
 
 // Use `contextBridge` APIs to expose Electron APIs to
 // renderer only if context isolation is enabled, otherwise

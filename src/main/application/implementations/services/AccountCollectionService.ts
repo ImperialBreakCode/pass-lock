@@ -36,7 +36,7 @@ class AccountCollectionService implements IAccountCollectionService {
 		)
 
 		if (!isInserted) {
-			return 'Could not insert service.'
+			return 'Service with the same name already exists.'
 		}
 	}
 

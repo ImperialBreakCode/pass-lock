@@ -21,7 +21,7 @@ class ServiceRepository implements IServiceRepository {
 	public async insertOne(service: ServiceInfo): Promise<boolean> {
 		const data = await this.passwordStorage.readData()
 
-		if (data.some((s) => s.id === service.id)) {
+		if (data.some((s) => s.id === service.id || s.name === service.name)) {
 			return false
 		}
 

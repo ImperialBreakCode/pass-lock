@@ -7,6 +7,8 @@ declare global {
 		api: {
 			checkForInitialState: () => Promise<boolean>
 			checkForKeys: () => boolean
+			getAllServices: () => Promise<ServiceInfo[] | string>
+			insertService: (serviceName: string) => Promise<string | void>
 		}
 	}
 }
