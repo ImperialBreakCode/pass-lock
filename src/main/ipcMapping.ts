@@ -35,4 +35,16 @@ export function mapToIpc(ipcMain: IpcMain, container: DependencyContainer) {
 			return (error as Error).message
 		}
 	})
+
+	ipcMain.handle(
+		'getService',
+		async (_, serviceId: string): Promise<ServiceInfo | undefined | string> => {
+			const accCollectionService = container.resolve(AccountCollectionService)
+			try {
+				return await accCollectionService.getOne(serviceId)
+			} catch (error) {
+				return (error as Error).message
+			}
+		}
+	)
 }

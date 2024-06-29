@@ -18,8 +18,12 @@ const insertService = async (serviceName: string): Promise<string | void> => {
 	return await ipcRenderer.invoke('addService', serviceName)
 }
 
+const getService = async (serviceId: string): Promise<ServiceInfo | undefined | string> => {
+	return await ipcRenderer.invoke('getService', serviceId)
+}
+
 // Custom APIs for renderer
-const api = { checkForInitialState, checkForKeys, getAllServices, insertService }
+const api = { checkForInitialState, checkForKeys, getAllServices, insertService, getService }
 
 // Use `contextBridge` APIs to expose Electron APIs to
 // renderer only if context isolation is enabled, otherwise

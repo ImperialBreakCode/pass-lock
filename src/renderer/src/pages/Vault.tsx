@@ -65,7 +65,10 @@ function Vault() {
 
 				<div className="pb-4">
 					{filterData(services).map((service) => (
-						<ServiceButton key={service.id} link={routes.accountInfos}>
+						<ServiceButton
+							key={service.id}
+							link={routes.accountInfos + '?serviceId=' + service.id}
+						>
 							{service.name}
 						</ServiceButton>
 					))}
