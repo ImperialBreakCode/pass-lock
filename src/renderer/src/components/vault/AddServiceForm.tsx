@@ -1,9 +1,10 @@
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '../ui/form'
+import { Form, FormField } from '../ui/form'
 import { Input } from '../ui/input'
 import { Button } from '../ui/button'
+import FormInputWrapper from '@/elements/FormInputWrapper'
 
 const formSchema = z.object({
 	name: z.string().min(1, { message: 'Name is required' }).max(50)
@@ -29,13 +30,9 @@ function AddServiceForm() {
 					control={form.control}
 					name="name"
 					render={({ field }) => (
-						<FormItem>
-							<FormLabel>Service Name</FormLabel>
-							<FormControl>
-								<Input {...field} placeholder="name..." />
-							</FormControl>
-							<FormMessage />
-						</FormItem>
+						<FormInputWrapper label="Service Name">
+							<Input {...field} placeholder="Enter service name..." />
+						</FormInputWrapper>
 					)}
 				/>
 				<Button type="submit">Submit</Button>

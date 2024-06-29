@@ -4,7 +4,7 @@ import { ScrollArea } from '@/components/ui/scroll-area'
 import PageHeader from '@/elements/PageHeader'
 import PageWrapper from '@/elements/PageWrapper'
 import { routes } from '@/routes'
-import SideSheet from '@/components/SideSheet'
+import SideSheet from '@/elements/SideSheet'
 import { useState } from 'react'
 import AddServiceForm from '@/components/vault/AddServiceForm'
 
