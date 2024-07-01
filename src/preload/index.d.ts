@@ -7,8 +7,9 @@ declare global {
 			checkForInitialState: () => Promise<boolean>
 			checkForKeys: () => boolean
 			getAllServices: () => Promise<ServiceInfo[] | string>
-			insertService: (serviceName: string) => Promise<string | void>
 			getService: (serviceId: string) => Promise<ServiceInfo | undefined | string>
+			insertService: (serviceName: string) => Promise<string | void>
+			updateService: (serviceId: string, serviceName: string) => Promise<string | void>
 			addAccountInfo: (newAccount: InsertAccount) => Promise<string | void>
 		}
 	}

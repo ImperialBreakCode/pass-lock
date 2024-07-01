@@ -1,34 +1,38 @@
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
-import { Form, FormField } from '../ui/form'
-import { Input } from '../ui/input'
-import { Button } from '../ui/button'
+import { Form, FormField } from './ui/form'
+import { Input } from './ui/input'
+import { Button } from './ui/button'
 import FormInputWrapper from '@/elements/FormInputWrapper'
 import { useContext } from 'react'
 import { ErrorDialogueContext } from '@/contexts/ContextWrapper'
+import ServiceInfo from '@/models/serviceInfo.type'
 
-interface AddServiceFormProps {
+interface AddUpdateServiceFormProps {
 	onSuccessfullSubmit: () => void
+	serviceToUpdate?: ServiceInfo | undefined
 }
 
 const formSchema = z.object({
 	name: z.string().min(1, { message: 'Name is required' }).max(50)
 })
 
-function AddServiceForm({ onSuccessfullSubmit }: AddServiceFormProps) {
+function AddUpdateServiceForm({ onSuccessfullSubmit, serviceToUpdate }: AddUpdateServiceFormProps) {
 	const [, setErrors] = useContext(ErrorDialogueContext)
 
 	const form = useForm<z.infer<typeof formSchema>>({
 		resolver: zodResolver(formSchema),
 		defaultValues: {
-			name: ''
+			name: serviceToUpdate?.name ?? ''
 		},
 		mode: 'onChange'
 	})
 
 	const onSubmit = async (data: z.infer<typeof formSchema>) => {
-		const result = await window.api.insertService(data.name)
+		const result = serviceToUpdate
+			? await window.api.updateService(serviceToUpdate.id, data.name)
+			: await window.api.insertService(data.name)
 
 		if (typeof result === 'string' && setErrors) {
 			setErrors(result)
@@ -49,10 +53,10 @@ function AddServiceForm({ onSuccessfullSubmit }: AddServiceFormProps) {
 						</FormInputWrapper>
 					)}
 				/>
-				<Button type="submit">Add</Button>
+				<Button type="submit">{serviceToUpdate ? 'Save' : 'Add'}</Button>
 			</form>
 		</Form>
 	)
 }
 
-export default AddServiceForm
+export default AddUpdateServiceForm

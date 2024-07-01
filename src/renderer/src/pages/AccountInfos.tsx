@@ -9,12 +9,14 @@ import { useContext, useEffect, useState } from 'react'
 import { useSearchParams } from 'react-router-dom'
 import SideSheet from '@/elements/SideSheet'
 import AddAccountForm from '@/components/accountInfo/AddAccountForm'
+import AddUpdateServiceForm from '@/components/AddUpdateServiceForm'
 
 function AccountInfos() {
 	const [searchParams] = useSearchParams()
 	const [service, setService] = useState<ServiceInfo | undefined>()
 
 	const [addAccOpen, setAddAccOpen] = useState(false)
+	const [updateServiceOpen, setUpdateServiceOpen] = useState(false)
 
 	const [, setErrorMessage] = useContext(ErrorDialogueContext)
 
@@ -52,10 +54,30 @@ function AccountInfos() {
 				/>
 			</SideSheet>
 
+			<SideSheet
+				open={updateServiceOpen}
+				onOpenChange={(open) => setUpdateServiceOpen(open)}
+				title="Edit service"
+				description={`Change account collection's name`}
+			>
+				<AddUpdateServiceForm
+					serviceToUpdate={service}
+					onSuccessfullSubmit={async () => {
+						setUpdateServiceOpen(false)
+						await fetchData()
+					}}
+				/>
+			</SideSheet>
+
 			<PageHeader
 				pageTitle={service?.name + ' accounts'}
 				backButtonLink={routes.vault}
-				rightElement={<HeaderRight addAccountClick={() => setAddAccOpen(true)} />}
+				rightElement={
+					<HeaderRight
+						updateServiceClick={() => setUpdateServiceOpen(true)}
+						addAccountClick={() => setAddAccOpen(true)}
+					/>
+				}
 			/>
 
 			<AccountTable data={service?.accounts ?? []} />

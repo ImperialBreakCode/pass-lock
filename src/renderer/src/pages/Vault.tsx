@@ -6,9 +6,9 @@ import PageWrapper from '@/elements/PageWrapper'
 import { routes } from '@/routes'
 import SideSheet from '@/elements/SideSheet'
 import { useContext, useEffect, useState } from 'react'
-import AddServiceForm from '@/components/vault/AddServiceForm'
 import { ErrorDialogueContext } from '@/contexts/ContextWrapper'
 import ServiceInfo from '@/models/serviceInfo.type'
+import AddUpdateServiceForm from '@/components/AddUpdateServiceForm'
 
 function Vault() {
 	const [, setErrorMessage] = useContext(ErrorDialogueContext)
@@ -44,7 +44,7 @@ function Vault() {
 				description="Add an account service (a collection of account infos) where you can safely store passwords and more information about your accounts"
 				title="Add an account service"
 			>
-				<AddServiceForm
+				<AddUpdateServiceForm
 					onSuccessfullSubmit={async () => {
 						await fetchData()
 						setSideOpen(false)

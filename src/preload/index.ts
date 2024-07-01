@@ -15,12 +15,16 @@ const getAllServices = async (): Promise<ServiceInfo[] | string> => {
 	return await ipcRenderer.invoke('getAllServices')
 }
 
+const getService = async (serviceId: string): Promise<ServiceInfo | undefined | string> => {
+	return await ipcRenderer.invoke('getService', serviceId)
+}
+
 const insertService = async (serviceName: string): Promise<string | void> => {
 	return await ipcRenderer.invoke('addService', serviceName)
 }
 
-const getService = async (serviceId: string): Promise<ServiceInfo | undefined | string> => {
-	return await ipcRenderer.invoke('getService', serviceId)
+const updateService = async (serviceId: string, serviceName: string): Promise<string | void> => {
+	return await ipcRenderer.invoke('updateService', serviceId, serviceName)
 }
 
 const addAccountInfo = async (newAccount: InsertAccount): Promise<string | void> => {
@@ -32,8 +36,9 @@ const api = {
 	checkForInitialState,
 	checkForKeys,
 	getAllServices,
-	insertService,
 	getService,
+	insertService,
+	updateService,
 	addAccountInfo
 }
 

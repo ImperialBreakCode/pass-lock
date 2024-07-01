@@ -37,6 +37,18 @@ function mapAccountCollection(ipcMain: IpcMain, container: DependencyContainer) 
 		}
 	})
 
+	ipcMain.handle(
+		'getService',
+		async (_, serviceId: string): Promise<ServiceInfo | undefined | string> => {
+			const accCollectionService = container.resolve(AccountCollectionService)
+			try {
+				return await accCollectionService.getOne(serviceId)
+			} catch (error) {
+				return (error as Error).message
+			}
+		}
+	)
+
 	ipcMain.handle('addService', async (_, serviceName: string): Promise<string | void> => {
 		const accCollectionService = container.resolve(AccountCollectionService)
 		try {
@@ -47,11 +59,12 @@ function mapAccountCollection(ipcMain: IpcMain, container: DependencyContainer) 
 	})
 
 	ipcMain.handle(
-		'getService',
-		async (_, serviceId: string): Promise<ServiceInfo | undefined | string> => {
+		'updateService',
+		async (_, serviceId: string, serviceName: string): Promise<string | void> => {
 			const accCollectionService = container.resolve(AccountCollectionService)
+
 			try {
-				return await accCollectionService.getOne(serviceId)
+				return await accCollectionService.updateOne(serviceId, serviceName)
 			} catch (error) {
 				return (error as Error).message
 			}
