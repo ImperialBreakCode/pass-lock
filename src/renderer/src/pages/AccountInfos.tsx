@@ -1,4 +1,5 @@
 import HeaderRight from '@/components/accountInfo/HeaderRight'
+import AccountTable from '@/components/accountInfo/AccountTable'
 import { ErrorDialogueContext } from '@/contexts/ContextWrapper'
 import PageHeader from '@/elements/PageHeader'
 import PageWrapper from '@/elements/PageWrapper'
@@ -35,6 +36,8 @@ function AccountInfos() {
 				backButtonLink={routes.vault}
 				rightElement={<HeaderRight />}
 			/>
+
+			<AccountTable data={service?.accounts ?? []} />
 		</PageWrapper>
 	)
 }
