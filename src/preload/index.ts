@@ -27,6 +27,10 @@ const updateService = async (serviceId: string, serviceName: string): Promise<st
 	return await ipcRenderer.invoke('updateService', serviceId, serviceName)
 }
 
+const deleteService = async (serviceId: string): Promise<string | void> => {
+	return await ipcRenderer.invoke('deleteService', serviceId)
+}
+
 const addAccountInfo = async (newAccount: InsertAccount): Promise<string | void> => {
 	return await ipcRenderer.invoke('addAccountInfo', newAccount)
 }
@@ -39,6 +43,7 @@ const api = {
 	getService,
 	insertService,
 	updateService,
+	deleteService,
 	addAccountInfo
 }
 

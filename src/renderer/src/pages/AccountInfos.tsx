@@ -6,17 +6,21 @@ import PageWrapper from '@/elements/PageWrapper'
 import ServiceInfo from '@/models/serviceInfo.type'
 import { routes } from '@/routes'
 import { useContext, useEffect, useState } from 'react'
-import { useSearchParams } from 'react-router-dom'
+import { useNavigate, useSearchParams } from 'react-router-dom'
 import SideSheet from '@/elements/SideSheet'
 import AddAccountForm from '@/components/accountInfo/AddAccountForm'
 import AddUpdateServiceForm from '@/components/AddUpdateServiceForm'
+import DeleteServiceForm from '@/components/accountInfo/DeleteServiceForm'
 
 function AccountInfos() {
+	const navigate = useNavigate()
+
 	const [searchParams] = useSearchParams()
 	const [service, setService] = useState<ServiceInfo | undefined>()
 
 	const [addAccOpen, setAddAccOpen] = useState(false)
 	const [updateServiceOpen, setUpdateServiceOpen] = useState(false)
+	const [deleteServiceOpen, setDeleteServiceOpen] = useState(false)
 
 	const [, setErrorMessage] = useContext(ErrorDialogueContext)
 
@@ -69,6 +73,23 @@ function AccountInfos() {
 				/>
 			</SideSheet>
 
+			<SideSheet
+				open={deleteServiceOpen}
+				onOpenChange={(open) => setDeleteServiceOpen(open)}
+				title="Delete service"
+				description={`Warning! This action cannot be undone. 
+					Do you want to delete the service with all its account information? If yes, enter the service name: ${service?.name}`}
+			>
+				{service && (
+					<DeleteServiceForm
+						service={service}
+						onSuccessfullSubmit={async () => {
+							navigate(routes.vault)
+						}}
+					/>
+				)}
+			</SideSheet>
+
 			<PageHeader
 				pageTitle={service?.name + ' accounts'}
 				backButtonLink={routes.vault}
@@ -76,6 +97,7 @@ function AccountInfos() {
 					<HeaderRight
 						updateServiceClick={() => setUpdateServiceOpen(true)}
 						addAccountClick={() => setAddAccOpen(true)}
+						deleteServiceClick={() => setDeleteServiceOpen(true)}
 					/>
 				}
 			/>

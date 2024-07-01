@@ -10,6 +10,7 @@ declare global {
 			getService: (serviceId: string) => Promise<ServiceInfo | undefined | string>
 			insertService: (serviceName: string) => Promise<string | void>
 			updateService: (serviceId: string, serviceName: string) => Promise<string | void>
+			deleteService: (serviceId: string) => Promise<string | void>
 			addAccountInfo: (newAccount: InsertAccount) => Promise<string | void>
 		}
 	}

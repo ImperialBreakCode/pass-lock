@@ -70,6 +70,16 @@ function mapAccountCollection(ipcMain: IpcMain, container: DependencyContainer) 
 			}
 		}
 	)
+
+	ipcMain.handle('deleteService', async (_, serviceId: string): Promise<string | void> => {
+		const accCollectionService = container.resolve(AccountCollectionService)
+
+		try {
+			return await accCollectionService.deleteOne(serviceId)
+		} catch (error) {
+			return (error as Error).message
+		}
+	})
 }
 
 function mapAccountInfo(ipcMain: IpcMain, container: DependencyContainer) {
