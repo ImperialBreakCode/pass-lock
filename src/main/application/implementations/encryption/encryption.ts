@@ -69,7 +69,7 @@ class Encrypton implements IEncryption {
 
 		const dechipher = createDecipheriv('aes-256-cbc', this.key, Buffer.from(iv, 'hex'))
 		let decrypted = dechipher.update(encrypted, 'hex', 'utf-8')
-		decrypted = dechipher.final('utf-8')
+		decrypted += dechipher.final('utf-8')
 
 		return decrypted
 	}
