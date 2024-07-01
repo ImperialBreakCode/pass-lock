@@ -1,10 +1,14 @@
 import { Pencil, Plus, Trash2 } from 'lucide-react'
 import { Button } from '../ui/button'
 
-function HeaderRight() {
+interface HeaderRightProps {
+	addAccountClick: () => void
+}
+
+function HeaderRight({ addAccountClick }: HeaderRightProps) {
 	return (
 		<div className="flex">
-			<Button className="text-xs mr-2" variant={'secondary'}>
+			<Button onClick={addAccountClick} className="text-xs mr-2" variant={'secondary'}>
 				<Plus size={15} className="mr-2" /> Add account info
 			</Button>
 			<Button className="text-xs mr-2" variant={'secondary'}>

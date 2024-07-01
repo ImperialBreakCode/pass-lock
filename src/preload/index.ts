@@ -2,30 +2,29 @@ import { contextBridge, ipcRenderer } from 'electron'
 import { electronAPI } from '@electron-toolkit/preload'
 import ServiceInfo from '../main/data/models/serviceInfo.type'
 import { InsertAccount } from '../main/application/abstractions/services/accountInfoService.interface'
-import { ipcEventNames } from '../main/ipcMapping'
 
 const checkForInitialState = async (): Promise<boolean> => {
-	return await ipcRenderer.invoke(ipcEventNames.checkForInitialState)
+	return await ipcRenderer.invoke('checkForInitialState')
 }
 
 const checkForKeys = (): boolean => {
-	return ipcRenderer.sendSync(ipcEventNames.checkForKeys)
+	return ipcRenderer.sendSync('checkForKeys')
 }
 
 const getAllServices = async (): Promise<ServiceInfo[] | string> => {
-	return await ipcRenderer.invoke(ipcEventNames.getAllServices)
+	return await ipcRenderer.invoke('getAllServices')
 }
 
 const insertService = async (serviceName: string): Promise<string | void> => {
-	return await ipcRenderer.invoke(ipcEventNames.addService, serviceName)
+	return await ipcRenderer.invoke('addService', serviceName)
 }
 
 const getService = async (serviceId: string): Promise<ServiceInfo | undefined | string> => {
-	return await ipcRenderer.invoke(ipcEventNames.getService, serviceId)
+	return await ipcRenderer.invoke('getService', serviceId)
 }
 
 const addAccountInfo = async (newAccount: InsertAccount): Promise<string | void> => {
-	return await ipcRenderer.invoke(ipcEventNames.addAccountInfo, newAccount)
+	return await ipcRenderer.invoke('addAccountInfo', newAccount)
 }
 
 // Custom APIs for renderer

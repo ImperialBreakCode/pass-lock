@@ -22,6 +22,7 @@ function Vault() {
 	}
 
 	const fetchData = async () => {
+		console.log(window.api)
 		const result = await window.api.getAllServices()
 
 		if (typeof result === 'string' && setErrorMessage) {

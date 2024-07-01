@@ -106,8 +106,12 @@ class AccountInfoService implements IAccountInfoService {
 	private async tryEncyrptData(account: AccountInfo): Promise<string | void> {
 		try {
 			await this.encryptor.encryptSingleAccount(account)
-		} catch {
-			return encryptionMessages.noEncryptionKeysFound
+		} catch (error) {
+			if (error instanceof EncryptonError) {
+				return error.message
+			}
+
+			throw error
 		}
 	}
 }

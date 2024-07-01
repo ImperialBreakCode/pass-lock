@@ -7,34 +7,55 @@ import ServiceInfo from '@/models/serviceInfo.type'
 import { routes } from '@/routes'
 import { useContext, useEffect, useState } from 'react'
 import { useSearchParams } from 'react-router-dom'
+import SideSheet from '@/elements/SideSheet'
+import AddAccountForm from '@/components/accountInfo/AddAccountForm'
 
 function AccountInfos() {
 	const [searchParams] = useSearchParams()
 	const [service, setService] = useState<ServiceInfo | undefined>()
 
+	const [addAccOpen, setAddAccOpen] = useState(false)
+
 	const [, setErrorMessage] = useContext(ErrorDialogueContext)
 
-	useEffect(() => {
-		async function fetchData() {
-			const serviceId = searchParams.get('serviceId')
-			const result = await window.api.getService(serviceId!)
+	const fetchData = async () => {
+		const serviceId = searchParams.get('serviceId')
+		const result = await window.api.getService(serviceId!)
 
-			if (typeof result === 'string' && setErrorMessage) {
-				setErrorMessage(result)
-			} else {
-				setService(result as ServiceInfo)
-			}
+		if (typeof result === 'string' && setErrorMessage) {
+			setErrorMessage(result)
+		} else {
+			setService(result as ServiceInfo)
 		}
+	}
 
+	useEffect(() => {
 		fetchData()
 	}, [])
 
 	return (
 		<PageWrapper>
+			<SideSheet
+				open={addAccOpen}
+				onOpenChange={(open) => setAddAccOpen(open)}
+				title="Add an account"
+				description={`Add the information about your account. 
+					This info will be encrypted when the file containing the keys 
+					is removed from the encryptionKeys folder`}
+			>
+				<AddAccountForm
+					serviceId={service?.id ?? ''}
+					onSuccessfullSubmit={async () => {
+						setAddAccOpen(false)
+						await fetchData()
+					}}
+				/>
+			</SideSheet>
+
 			<PageHeader
 				pageTitle={service?.name + ' accounts'}
 				backButtonLink={routes.vault}
-				rightElement={<HeaderRight />}
+				rightElement={<HeaderRight addAccountClick={() => setAddAccOpen(true)} />}
 			/>
 
 			<AccountTable data={service?.accounts ?? []} />

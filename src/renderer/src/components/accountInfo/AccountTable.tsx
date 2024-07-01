@@ -28,8 +28,16 @@ function AccountTable({ data }: AccountTableProps) {
 				<TableBody>
 					{data.map((account) => (
 						<TableRow key={account.id} className="border-b-border cursor-pointer">
-							<TableCell>{account.username}</TableCell>
-							<TableCell>{account.password}</TableCell>
+							<TableCell>
+								{account.username.length < 30
+									? account.username
+									: account.username.slice(0, 30) + '...'}
+							</TableCell>
+							<TableCell>
+								{account.password.length < 30
+									? account.password
+									: account.password.slice(0, 30) + '...'}
+							</TableCell>
 							<TableCell>
 								{account.moreInfo.length < 30
 									? account.moreInfo

@@ -15,7 +15,7 @@ class AccountEncryption implements IAccountEncryption {
 	) {}
 
 	public async encryptSingleAccount(account: AccountInfo): Promise<void> {
-		await this.accountCipherAction(account, this.encryptor.encrypt)
+		await this.accountCipherAction(account, (data: string) => this.encryptor.encrypt(data))
 	}
 
 	public async encyptMultipleAccounts(accounts: AccountInfo[]): Promise<void> {
@@ -25,7 +25,7 @@ class AccountEncryption implements IAccountEncryption {
 	}
 
 	public async decryptSingleAccount(account: AccountInfo): Promise<void> {
-		await this.accountCipherAction(account, this.encryptor.decrypt)
+		await this.accountCipherAction(account, (data: string) => this.encryptor.decrypt(data))
 	}
 
 	public async decryptMultipleAccounts(accounts: AccountInfo[]): Promise<void> {
