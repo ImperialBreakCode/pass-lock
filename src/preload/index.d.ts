@@ -13,6 +13,7 @@ declare global {
 			deleteService: (serviceId: string) => Promise<string | void>
 			addAccountInfo: (newAccount: InsertAccount) => Promise<string | void>
 			updateAccountInfo: (account: AccountInfo, serviceId: string) => Promise<string | void>
+			deleteAccountInfo: (accountId: string, serviceId: string) => Promise<string | void>
 		}
 	}
 }

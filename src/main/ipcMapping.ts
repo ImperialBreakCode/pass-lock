@@ -106,4 +106,17 @@ function mapAccountInfo(ipcMain: IpcMain, container: DependencyContainer) {
 			return (error as Error).message
 		}
 	})
+
+	ipcMain.handle(
+		'deleteAccountInfo',
+		async (_, accountId: string, serviceId: string): Promise<string | void> => {
+			const accInfoService = container.resolve(AccountInfoService)
+
+			try {
+				return await accInfoService.deleteAccount(accountId, serviceId)
+			} catch (error) {
+				return (error as Error).message
+			}
+		}
+	)
 }

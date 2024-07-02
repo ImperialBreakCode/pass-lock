@@ -43,6 +43,10 @@ const updateAccountInfo = async (
 	return await ipcRenderer.invoke('updateAccountInfo', account, serviceId)
 }
 
+const deleteAccountInfo = async (accountId: string, serviceId: string): Promise<string | void> => {
+	return await ipcRenderer.invoke('deleteAccountInfo', accountId, serviceId)
+}
+
 // Custom APIs for renderer
 const api = {
 	checkForInitialState,
@@ -53,7 +57,8 @@ const api = {
 	updateService,
 	deleteService,
 	addAccountInfo,
-	updateAccountInfo
+	updateAccountInfo,
+	deleteAccountInfo
 }
 
 // Use `contextBridge` APIs to expose Electron APIs to

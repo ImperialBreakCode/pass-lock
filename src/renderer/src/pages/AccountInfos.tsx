@@ -13,6 +13,8 @@ import AddUpdateServiceForm from '@/components/AddUpdateServiceForm'
 import DeleteServiceForm from '@/components/accountInfo/DeleteServiceForm'
 import AccountInformationDialogue from '@/components/accountInfo/AccountInformationDialogue'
 import AccountInfo from '@/models/accountInfo.type'
+import DeleteAccountConfirmationDialog from '@/components/accountInfo/DeleteAccountConfirmationDialog'
+import AlertDestructive from '@/components/AlertDestructive'
 
 function AccountInfos() {
 	const navigate = useNavigate()
@@ -28,6 +30,7 @@ function AccountInfos() {
 
 	const [selectedAccount, setSelectedAccount] = useState<AccountInfo | undefined>()
 	const [accountToUpdate, setAccountToUpdate] = useState<AccountInfo | undefined>()
+	const [accountIdToDelete, setAccountIdToDelete] = useState<string | undefined>()
 
 	const [, setErrorMessage] = useContext(ErrorDialogueContext)
 
@@ -50,6 +53,20 @@ function AccountInfos() {
 		if (acc) {
 			setSelectedAccount(acc)
 		}
+	}
+
+	const onAccountDelete = async () => {
+		if (accountIdToDelete && service) {
+			const result = await window.api.deleteAccountInfo(accountIdToDelete!, service!.id)
+
+			if (typeof result === 'string' && setErrorMessage) {
+				setErrorMessage(result)
+			} else {
+				await fetchData()
+			}
+		}
+
+		setAccountIdToDelete(undefined)
 	}
 
 	useEffect(() => {
@@ -129,7 +146,10 @@ function AccountInfos() {
 			</SideSheet>
 
 			<AccountInformationDialogue
-				onDelete={() => {}}
+				onDelete={() => {
+					setAccountIdToDelete(selectedAccount?.id)
+					setSelectedAccount(undefined)
+				}}
 				onEdit={() => {
 					setAccountToUpdate(selectedAccount)
 					setSelectedAccount(undefined)
@@ -166,6 +186,16 @@ function AccountInfos() {
 					'information is locked'
 				)}
 			</AccountInformationDialogue>
+
+			<DeleteAccountConfirmationDialog
+				open={accountIdToDelete !== undefined}
+				onClose={() => setAccountIdToDelete(undefined)}
+				onDelete={onAccountDelete}
+			>
+				<AlertDestructive>
+					This Action cannot be undone. Are you sure you want to delete this account info?
+				</AlertDestructive>
+			</DeleteAccountConfirmationDialog>
 
 			<PageHeader
 				pageTitle={service?.name + ' accounts'}
