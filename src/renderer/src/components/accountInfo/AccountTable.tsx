@@ -11,9 +11,10 @@ import {
 
 interface AccountTableProps {
 	data: AccountInfo[]
+	onClickRow: (id: string) => void
 }
 
-function AccountTable({ data }: AccountTableProps) {
+function AccountTable({ data, onClickRow }: AccountTableProps) {
 	return (
 		<div className="mt-4">
 			<Table>
@@ -27,7 +28,11 @@ function AccountTable({ data }: AccountTableProps) {
 				</TableHeader>
 				<TableBody>
 					{data.map((account) => (
-						<TableRow key={account.id} className="border-b-border cursor-pointer">
+						<TableRow
+							onClick={() => onClickRow(account.id)}
+							key={account.id}
+							className="border-b-border cursor-pointer"
+						>
 							<TableCell>
 								{account.username.length < 30
 									? account.username

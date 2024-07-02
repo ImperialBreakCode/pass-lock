@@ -22,8 +22,8 @@ function SideSheet({ children, description, title, open, onOpenChange }: SideShe
 				<SheetHeader>
 					<SheetTitle>{title}</SheetTitle>
 					<SheetDescription>{description}</SheetDescription>
-					<div>{children}</div>
 				</SheetHeader>
+				<div>{children}</div>
 			</SheetContent>
 		</Sheet>
 	)

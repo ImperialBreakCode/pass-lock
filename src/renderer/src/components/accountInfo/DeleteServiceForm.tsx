@@ -8,6 +8,7 @@ import { Form, FormField } from '../ui/form'
 import FormInputWrapper from '@/elements/FormInputWrapper'
 import { Button } from '../ui/button'
 import { Input } from '../ui/input'
+import AlertDestructive from '../AlertDestructive'
 
 interface DeleteServiceFormProps {
 	onSuccessfullSubmit: () => void
@@ -40,22 +41,27 @@ function DeleteServiceForm({ onSuccessfullSubmit, service }: DeleteServiceFormPr
 	}
 
 	return (
-		<Form {...form}>
-			<form onSubmit={form.handleSubmit(onSubmit)} className="space-y-5 mt-5">
-				<FormField
-					control={form.control}
-					name="name"
-					render={({ field }) => (
-						<FormInputWrapper label="Service Name">
-							<Input {...field} placeholder="Enter service name..." />
-						</FormInputWrapper>
-					)}
-				/>
-				<Button type="submit" variant={'destructive'}>
-					Delete
-				</Button>
-			</form>
-		</Form>
+		<>
+			<AlertDestructive>
+				{`You're going to delete this service. This action cannot be undone.`}
+			</AlertDestructive>
+			<Form {...form}>
+				<form onSubmit={form.handleSubmit(onSubmit)} className="space-y-5 mt-5">
+					<FormField
+						control={form.control}
+						name="name"
+						render={({ field }) => (
+							<FormInputWrapper label="Service Name">
+								<Input {...field} placeholder="Enter service name..." />
+							</FormInputWrapper>
+						)}
+					/>
+					<Button type="submit" variant={'destructive'}>
+						Delete
+					</Button>
+				</form>
+			</Form>
+		</>
 	)
 }
 

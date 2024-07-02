@@ -11,6 +11,8 @@ import SideSheet from '@/elements/SideSheet'
 import AddAccountForm from '@/components/accountInfo/AddAccountForm'
 import AddUpdateServiceForm from '@/components/AddUpdateServiceForm'
 import DeleteServiceForm from '@/components/accountInfo/DeleteServiceForm'
+import AccountInformationDialogue from '@/components/accountInfo/AccountInformationDialogue'
+import AccountInfo from '@/models/accountInfo.type'
 
 function AccountInfos() {
 	const navigate = useNavigate()
@@ -23,6 +25,8 @@ function AccountInfos() {
 	const [addAccOpen, setAddAccOpen] = useState(false)
 	const [updateServiceOpen, setUpdateServiceOpen] = useState(false)
 	const [deleteServiceOpen, setDeleteServiceOpen] = useState(false)
+
+	const [selectedAccount, setSelectedAccount] = useState<AccountInfo | undefined>()
 
 	const [, setErrorMessage] = useContext(ErrorDialogueContext)
 
@@ -37,6 +41,14 @@ function AccountInfos() {
 		}
 
 		setCanEdit(window.api.checkForKeys())
+	}
+
+	const onRowSelected = (id: string) => {
+		const acc = service?.accounts.find((account) => account.id === id)
+
+		if (acc) {
+			setSelectedAccount(acc)
+		}
 	}
 
 	useEffect(() => {
@@ -81,8 +93,7 @@ function AccountInfos() {
 				open={deleteServiceOpen}
 				onOpenChange={(open) => setDeleteServiceOpen(open)}
 				title="Delete service"
-				description={`Warning! This action cannot be undone. 
-					Do you want to delete the service with all its account information? If yes, enter the service name: ${service?.name}`}
+				description={`Do you want to delete this service with all its account information? If yes, enter the service name: ${service?.name}`}
 			>
 				{service && (
 					<DeleteServiceForm
@@ -93,6 +104,33 @@ function AccountInfos() {
 					/>
 				)}
 			</SideSheet>
+
+			<AccountInformationDialogue
+				open={selectedAccount !== undefined}
+				onClose={() => setSelectedAccount(undefined)}
+			>
+				<div className="flex mt-4">
+					<p>
+						username:{' '}
+						<span className="text-foreground text-[1.1rem]">
+							{selectedAccount?.username}
+						</span>
+					</p>
+					<p className="ml-4">
+						password{' '}
+						<span className="text-foreground text-[1.1rem]">
+							{selectedAccount?.password}
+						</span>
+					</p>
+				</div>
+
+				{(selectedAccount?.moreInfo.length ?? 0) > 0 && (
+					<p className="mt-4">
+						<span className="text-foreground">More information: </span> <br />
+						{selectedAccount?.moreInfo}
+					</p>
+				)}
+			</AccountInformationDialogue>
 
 			<PageHeader
 				pageTitle={service?.name + ' accounts'}
@@ -108,7 +146,7 @@ function AccountInfos() {
 				}
 			/>
 
-			<AccountTable data={service?.accounts ?? []} />
+			<AccountTable data={service?.accounts ?? []} onClickRow={onRowSelected} />
 		</PageWrapper>
 	)
 }
