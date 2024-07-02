@@ -6,9 +6,10 @@ import { Input } from '../ui/input'
 interface ServiceControlProps {
 	onAddService: React.MouseEventHandler<HTMLButtonElement>
 	onSearch?: ChangeEventHandler<HTMLInputElement> | undefined
+	canEdit?: boolean
 }
 
-function ServiceControl({ onAddService, onSearch }: ServiceControlProps) {
+function ServiceControl({ onAddService, onSearch, canEdit }: ServiceControlProps) {
 	return (
 		<Card className="border-border my-5">
 			<CardHeader>
@@ -17,9 +18,11 @@ function ServiceControl({ onAddService, onSearch }: ServiceControlProps) {
 			<CardContent className="flex justify-between">
 				<Input onChange={onSearch} placeholder="search..." />
 
-				<Button className="ml-5" onClick={onAddService}>
-					Add service
-				</Button>
+				{canEdit && (
+					<Button className="ml-5" onClick={onAddService}>
+						Add service
+					</Button>
+				)}
 			</CardContent>
 		</Card>
 	)

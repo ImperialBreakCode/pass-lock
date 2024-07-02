@@ -16,7 +16,9 @@ function AccountInfos() {
 	const navigate = useNavigate()
 
 	const [searchParams] = useSearchParams()
+
 	const [service, setService] = useState<ServiceInfo | undefined>()
+	const [canEdit, setCanEdit] = useState(false)
 
 	const [addAccOpen, setAddAccOpen] = useState(false)
 	const [updateServiceOpen, setUpdateServiceOpen] = useState(false)
@@ -33,6 +35,8 @@ function AccountInfos() {
 		} else {
 			setService(result as ServiceInfo)
 		}
+
+		setCanEdit(window.api.checkForKeys())
 	}
 
 	useEffect(() => {
@@ -94,11 +98,13 @@ function AccountInfos() {
 				pageTitle={service?.name + ' accounts'}
 				backButtonLink={routes.vault}
 				rightElement={
-					<HeaderRight
-						updateServiceClick={() => setUpdateServiceOpen(true)}
-						addAccountClick={() => setAddAccOpen(true)}
-						deleteServiceClick={() => setDeleteServiceOpen(true)}
-					/>
+					canEdit ? (
+						<HeaderRight
+							updateServiceClick={() => setUpdateServiceOpen(true)}
+							addAccountClick={() => setAddAccOpen(true)}
+							deleteServiceClick={() => setDeleteServiceOpen(true)}
+						/>
+					) : undefined
 				}
 			/>
 

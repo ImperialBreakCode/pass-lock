@@ -16,13 +16,13 @@ function Vault() {
 	const [sideOpen, setSideOpen] = useState(false)
 	const [services, setServices] = useState<ServiceInfo[]>([])
 	const [searchTerm, setSearchTerm] = useState('')
+	const [canEdit, setCanEdit] = useState(false)
 
 	const filterData = (data: ServiceInfo[]) => {
 		return data.filter((d) => d.name.toLowerCase().includes(searchTerm.toLowerCase()))
 	}
 
 	const fetchData = async () => {
-		console.log(window.api)
 		const result = await window.api.getAllServices()
 
 		if (typeof result === 'string' && setErrorMessage) {
@@ -30,6 +30,8 @@ function Vault() {
 		} else {
 			setServices(result as ServiceInfo[])
 		}
+
+		setCanEdit(window.api.checkForKeys())
 	}
 
 	useEffect(() => {
@@ -56,6 +58,7 @@ function Vault() {
 
 			<ScrollArea className="flex-auto px-5">
 				<ServiceControl
+					canEdit={canEdit}
 					onSearch={(e) => {
 						setSearchTerm(e.target.value)
 					}}
