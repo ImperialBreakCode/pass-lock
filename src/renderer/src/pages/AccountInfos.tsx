@@ -8,7 +8,7 @@ import { routes } from '@/routes'
 import { useContext, useEffect, useState } from 'react'
 import { useNavigate, useSearchParams } from 'react-router-dom'
 import SideSheet from '@/elements/SideSheet'
-import AddAccountForm from '@/components/accountInfo/AddAccountForm'
+import AddUpdateAccountForm from '@/components/accountInfo/AddEditAccountForm'
 import AddUpdateServiceForm from '@/components/AddUpdateServiceForm'
 import DeleteServiceForm from '@/components/accountInfo/DeleteServiceForm'
 import AccountInformationDialogue from '@/components/accountInfo/AccountInformationDialogue'
@@ -27,6 +27,7 @@ function AccountInfos() {
 	const [deleteServiceOpen, setDeleteServiceOpen] = useState(false)
 
 	const [selectedAccount, setSelectedAccount] = useState<AccountInfo | undefined>()
+	const [accountToUpdate, setAccountToUpdate] = useState<AccountInfo | undefined>()
 
 	const [, setErrorMessage] = useContext(ErrorDialogueContext)
 
@@ -65,7 +66,7 @@ function AccountInfos() {
 					This info will be encrypted when the file containing the keys 
 					is removed from the encryptionKeys folder`}
 			>
-				<AddAccountForm
+				<AddUpdateAccountForm
 					serviceId={service?.id ?? ''}
 					onSuccessfullSubmit={async () => {
 						setAddAccOpen(false)
@@ -105,9 +106,34 @@ function AccountInfos() {
 				)}
 			</SideSheet>
 
+			<SideSheet
+				open={accountToUpdate !== undefined}
+				onOpenChange={(open) => {
+					if (!open) {
+						setAccountToUpdate(undefined)
+					}
+				}}
+				title="Update account information"
+				description={`Change account information`}
+			>
+				{accountToUpdate && service && (
+					<AddUpdateAccountForm
+						serviceId={service.id}
+						accountToUpdate={accountToUpdate}
+						onSuccessfullSubmit={async () => {
+							setAccountToUpdate(undefined)
+							await fetchData()
+						}}
+					/>
+				)}
+			</SideSheet>
+
 			<AccountInformationDialogue
 				onDelete={() => {}}
-				onEdit={() => {}}
+				onEdit={() => {
+					setAccountToUpdate(selectedAccount)
+					setSelectedAccount(undefined)
+				}}
 				canEdit={canEdit}
 				open={selectedAccount !== undefined}
 				onClose={() => setSelectedAccount(undefined)}

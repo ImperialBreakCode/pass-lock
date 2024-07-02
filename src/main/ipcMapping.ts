@@ -5,6 +5,7 @@ import AccountCollectionService from './application/implementations/services/acc
 import ServiceInfo from './data/models/serviceInfo.type'
 import AccountInfoService from './application/implementations/services/accountInfoService'
 import { InsertAccount } from './application/abstractions/services/accountInfoService.interface'
+import AccountInfo from './data/models/accountInfo.type'
 
 export function mapToIpc(ipcMain: IpcMain, container: DependencyContainer) {
 	mapHelperService(ipcMain, container)
@@ -95,4 +96,14 @@ function mapAccountInfo(ipcMain: IpcMain, container: DependencyContainer) {
 			}
 		}
 	)
+
+	ipcMain.handle('updateAccountInfo', async (_, account: AccountInfo, serviceId: string) => {
+		const accInfoService = container.resolve(AccountInfoService)
+
+		try {
+			return await accInfoService.updateOneAccount(account, serviceId)
+		} catch (error) {
+			return (error as Error).message
+		}
+	})
 }

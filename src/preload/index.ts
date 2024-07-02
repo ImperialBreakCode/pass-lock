@@ -2,6 +2,7 @@ import { contextBridge, ipcRenderer } from 'electron'
 import { electronAPI } from '@electron-toolkit/preload'
 import ServiceInfo from '../main/data/models/serviceInfo.type'
 import { InsertAccount } from '../main/application/abstractions/services/accountInfoService.interface'
+import AccountInfo from '../main/data/models/accountInfo.type'
 
 const checkForInitialState = async (): Promise<boolean> => {
 	return await ipcRenderer.invoke('checkForInitialState')
@@ -35,6 +36,13 @@ const addAccountInfo = async (newAccount: InsertAccount): Promise<string | void>
 	return await ipcRenderer.invoke('addAccountInfo', newAccount)
 }
 
+const updateAccountInfo = async (
+	account: AccountInfo,
+	serviceId: string
+): Promise<string | void> => {
+	return await ipcRenderer.invoke('updateAccountInfo', account, serviceId)
+}
+
 // Custom APIs for renderer
 const api = {
 	checkForInitialState,
@@ -44,7 +52,8 @@ const api = {
 	insertService,
 	updateService,
 	deleteService,
-	addAccountInfo
+	addAccountInfo,
+	updateAccountInfo
 }
 
 // Use `contextBridge` APIs to expose Electron APIs to

@@ -8,10 +8,12 @@ import FormInputWrapper from '@/elements/FormInputWrapper'
 import { Button } from '../ui/button'
 import { Input } from '../ui/input'
 import { Textarea } from '../ui/textarea'
+import AccountInfo from '@/models/accountInfo.type'
 
-interface AddAccountFormProps {
+interface AddUpdateAccountFormProps {
 	onSuccessfullSubmit: () => void
 	serviceId: string
+	accountToUpdate?: AccountInfo | undefined
 }
 
 const formSchema = z.object({
@@ -20,24 +22,40 @@ const formSchema = z.object({
 	moreInfo: z.string().max(100)
 })
 
-function AddAccountForm({ onSuccessfullSubmit, serviceId }: AddAccountFormProps) {
+function AddUpdateAccountForm({
+	onSuccessfullSubmit,
+	serviceId,
+	accountToUpdate
+}: AddUpdateAccountFormProps) {
 	const [, setErrors] = useContext(ErrorDialogueContext)
 
 	const form = useForm<z.infer<typeof formSchema>>({
 		resolver: zodResolver(formSchema),
 		defaultValues: {
-			username: '',
-			password: '',
-			moreInfo: ''
+			username: accountToUpdate?.username ?? '',
+			password: accountToUpdate?.password ?? '',
+			moreInfo: accountToUpdate?.moreInfo ?? ''
 		},
 		mode: 'onChange'
 	})
 
 	const onSubmit = async (data: z.infer<typeof formSchema>) => {
-		const result = await window.api.addAccountInfo({
-			...data,
-			serviceId: serviceId
-		})
+		let result
+
+		if (accountToUpdate) {
+			result = await window.api.updateAccountInfo(
+				{
+					id: accountToUpdate.id,
+					...data
+				},
+				serviceId
+			)
+		} else {
+			result = await window.api.addAccountInfo({
+				...data,
+				serviceId: serviceId
+			})
+		}
 
 		if (typeof result === 'string' && setErrors) {
 			setErrors(result)
@@ -76,10 +94,10 @@ function AddAccountForm({ onSuccessfullSubmit, serviceId }: AddAccountFormProps)
 						</FormInputWrapper>
 					)}
 				/>
-				<Button type="submit">Add</Button>
+				<Button type="submit">{accountToUpdate ? 'Save' : 'Add'}</Button>
 			</form>
 		</Form>
 	)
 }
 
-export default AddAccountForm
+export default AddUpdateAccountForm
