@@ -13,9 +13,19 @@ interface AccountInformationDialogueProps {
 	open: boolean
 	onClose: () => void
 	children: ReactNode
+	canEdit: boolean
+	onEdit: () => void
+	onDelete: () => void
 }
 
-function AccountInformationDialogue({ open, onClose, children }: AccountInformationDialogueProps) {
+function AccountInformationDialogue({
+	open,
+	onClose,
+	children,
+	canEdit,
+	onDelete,
+	onEdit
+}: AccountInformationDialogueProps) {
 	return (
 		<AlertDialog open={open}>
 			<AlertDialogContent className="text-foreground border-border bg-card">
@@ -23,8 +33,19 @@ function AccountInformationDialogue({ open, onClose, children }: AccountInformat
 					<AlertDialogTitle>Account Information</AlertDialogTitle>
 					<AlertDialogDescription>{children}</AlertDialogDescription>
 				</AlertDialogHeader>
-				<AlertDialogFooter>
-					<Button variant={'default'} onClick={onClose}>
+				<AlertDialogFooter className="!mt-5">
+					{canEdit && (
+						<>
+							<Button onClick={onEdit} variant={'outline'}>
+								Edit
+							</Button>
+							<Button onClick={onDelete} variant={'destructive'}>
+								Delete
+							</Button>
+						</>
+					)}
+
+					<Button className="!ml-auto" variant={'outline'} onClick={onClose}>
 						Close
 					</Button>
 				</AlertDialogFooter>

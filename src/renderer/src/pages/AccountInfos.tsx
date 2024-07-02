@@ -106,29 +106,38 @@ function AccountInfos() {
 			</SideSheet>
 
 			<AccountInformationDialogue
+				onDelete={() => {}}
+				onEdit={() => {}}
+				canEdit={canEdit}
 				open={selectedAccount !== undefined}
 				onClose={() => setSelectedAccount(undefined)}
 			>
-				<div className="flex mt-4">
-					<p>
-						username:{' '}
-						<span className="text-foreground text-[1.1rem]">
-							{selectedAccount?.username}
-						</span>
-					</p>
-					<p className="ml-4">
-						password{' '}
-						<span className="text-foreground text-[1.1rem]">
-							{selectedAccount?.password}
-						</span>
-					</p>
-				</div>
+				{canEdit ? (
+					<>
+						<div className="flex mt-4">
+							<p>
+								username:{' '}
+								<span className="text-foreground text-[1.1rem]">
+									{selectedAccount?.username}
+								</span>
+							</p>
+							<p className="ml-4">
+								password{' '}
+								<span className="text-foreground text-[1.1rem]">
+									{selectedAccount?.password}
+								</span>
+							</p>
+						</div>
 
-				{(selectedAccount?.moreInfo.length ?? 0) > 0 && (
-					<p className="mt-4">
-						<span className="text-foreground">More information: </span> <br />
-						{selectedAccount?.moreInfo}
-					</p>
+						{(selectedAccount?.moreInfo.length ?? 0) > 0 && (
+							<p className="mt-4">
+								<span className="text-foreground">More information: </span> <br />
+								{selectedAccount?.moreInfo}
+							</p>
+						)}
+					</>
+				) : (
+					'information is locked'
 				)}
 			</AccountInformationDialogue>
 
