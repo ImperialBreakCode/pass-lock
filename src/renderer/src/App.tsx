@@ -6,6 +6,7 @@ import { routes } from './routes'
 import Vault from './pages/Vault'
 import AccountInfos from './pages/AccountInfos'
 import ContextWrapper from './contexts/ContextWrapper'
+import About from './pages/About'
 
 function App(): JSX.Element {
 	return (
@@ -19,6 +20,7 @@ function App(): JSX.Element {
 								<Route index element={<Vault />} />
 								<Route path={routes.accountInfos} element={<AccountInfos />} />
 							</Route>
+							<Route path={routes.about} element={<About />} />
 						</Route>
 					</Routes>
 				</HashRouter>
