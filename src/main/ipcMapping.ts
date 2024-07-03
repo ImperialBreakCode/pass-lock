@@ -1,4 +1,4 @@
-import { IpcMain } from 'electron'
+import { IpcMain, app } from 'electron'
 import { DependencyContainer } from 'tsyringe'
 import HelperService from './application/implementations/services/helperService'
 import AccountCollectionService from './application/implementations/services/accountCollectionService'
@@ -24,6 +24,10 @@ function mapHelperService(ipcMain: IpcMain, container: DependencyContainer) {
 		const helperService = container.resolve(HelperService)
 
 		e.returnValue = helperService.checkForKeys()
+	})
+
+	ipcMain.on('getAppVersion', (e) => {
+		e.returnValue = app.getVersion()
 	})
 }
 

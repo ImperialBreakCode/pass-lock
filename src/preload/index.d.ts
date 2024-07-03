@@ -4,6 +4,7 @@ declare global {
 	interface Window {
 		electron: ElectronAPI
 		api: {
+			getAppVersion: () => string
 			checkForInitialState: () => Promise<boolean>
 			checkForKeys: () => boolean
 			getAllServices: () => Promise<ServiceInfo[] | string>

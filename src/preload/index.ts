@@ -4,6 +4,10 @@ import ServiceInfo from '../main/data/models/serviceInfo.type'
 import { InsertAccount } from '../main/application/abstractions/services/accountInfoService.interface'
 import AccountInfo from '../main/data/models/accountInfo.type'
 
+const getAppVersion = (): string => {
+	return ipcRenderer.sendSync('getAppVersion')
+}
+
 const checkForInitialState = async (): Promise<boolean> => {
 	return await ipcRenderer.invoke('checkForInitialState')
 }
@@ -49,6 +53,7 @@ const deleteAccountInfo = async (accountId: string, serviceId: string): Promise<
 
 // Custom APIs for renderer
 const api = {
+	getAppVersion,
 	checkForInitialState,
 	checkForKeys,
 	getAllServices,
