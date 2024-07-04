@@ -2,11 +2,13 @@ import AppNavLink from '@/elements/AppNavLink'
 import LeftNavMenuBox from '@/elements/LeftNavMenuBox'
 import { routes } from '@/routes'
 import { Info, Shield, Vault } from 'lucide-react'
+import transparentIcon from '@/assets/transparentIcon.svg'
 
 function NavMenu() {
 	return (
 		<LeftNavMenuBox>
-			<div className="px-2">
+			<div className="px-2 flex flex-col items-center">
+				<img className="w-12" src={transparentIcon} />
 				<h1 className="text-lg font-medium capitalize">password lock</h1>
 			</div>
 
