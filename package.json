@@ -1,9 +1,9 @@
 {
-	"name": "pass-lock",
+	"name": "password-lock",
 	"version": "1.0.0",
-	"description": "An Electron application with React and TypeScript",
+	"description": "Password manager with local encrypted storage.",
 	"main": "./out/main/index.js",
-	"author": "example.com",
+	"author": "ImperialBreakCode",
 	"homepage": "https://electron-vite.org",
 	"scripts": {
 		"format": "prettier --write .",

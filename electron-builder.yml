@@ -1,5 +1,5 @@
-appId: com.electron.app
-productName: pass-lock
+appId: com.passLockManager.app
+productName: Password Lock
 directories:
     buildResources: build
 files:
@@ -13,12 +13,12 @@ asarUnpack:
     - resources/**
 win:
     executableName: pass-lock
-    target: portable
-# nsis:
-#     artifactName: ${name}-${version}-setup.${ext}
-#     shortcutName: ${productName}
-#     uninstallDisplayName: ${productName}
-#     createDesktopShortcut: always
+    target: nsis
+nsis:
+    artifactName: ${name}-${version}-setup.${ext}
+    shortcutName: ${productName}
+    uninstallDisplayName: ${productName}
+    createDesktopShortcut: always
 mac:
     entitlementsInherit: build/entitlements.mac.plist
     extendInfo:
