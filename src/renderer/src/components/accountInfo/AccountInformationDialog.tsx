@@ -9,7 +9,7 @@ import {
 } from '../ui/alert-dialog'
 import { Button } from '../ui/button'
 
-interface AccountInformationDialogueProps {
+interface AccountInformationDialogProps {
 	open: boolean
 	onClose: () => void
 	children: ReactNode
@@ -18,19 +18,21 @@ interface AccountInformationDialogueProps {
 	onDelete: () => void
 }
 
-function AccountInformationDialogue({
+function AccountInformationDialog({
 	open,
 	onClose,
 	children,
 	canEdit,
 	onDelete,
 	onEdit
-}: AccountInformationDialogueProps) {
+}: AccountInformationDialogProps) {
 	return (
 		<AlertDialog open={open}>
 			<AlertDialogContent className="text-foreground border-border bg-card">
 				<AlertDialogHeader>
-					<AlertDialogTitle>Account Information</AlertDialogTitle>
+					<AlertDialogTitle className="border-b-border border-solid border-b pb-4">
+						Account Information
+					</AlertDialogTitle>
 					<AlertDialogDescription>{children}</AlertDialogDescription>
 				</AlertDialogHeader>
 				<AlertDialogFooter className="!mt-5">
@@ -54,4 +56,4 @@ function AccountInformationDialogue({
 	)
 }
 
-export default AccountInformationDialogue
+export default AccountInformationDialog

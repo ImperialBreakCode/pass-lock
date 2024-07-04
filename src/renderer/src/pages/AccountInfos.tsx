@@ -11,7 +11,7 @@ import SideSheet from '@/elements/SideSheet'
 import AddUpdateAccountForm from '@/components/accountInfo/AddEditAccountForm'
 import AddUpdateServiceForm from '@/components/AddUpdateServiceForm'
 import DeleteServiceForm from '@/components/accountInfo/DeleteServiceForm'
-import AccountInformationDialogue from '@/components/accountInfo/AccountInformationDialogue'
+import AccountInformationDialogue from '@/components/accountInfo/AccountInformationDialog'
 import AccountInfo from '@/models/accountInfo.type'
 import DeleteAccountConfirmationDialog from '@/components/accountInfo/DeleteAccountConfirmationDialog'
 import AlertDestructive from '@/components/AlertDestructive'
@@ -159,28 +159,25 @@ function AccountInfos() {
 			>
 				{canEdit ? (
 					<>
-						<div className="flex mt-4">
+						<div className="mt-4">
 							<p>
-								username:{' '}
-								<span className="text-foreground text-[1.1rem]">
-									{selectedAccount?.username}
-								</span>
+								username: <br />
+								<span className="text-foreground">{selectedAccount?.username}</span>
 							</p>
-							<p className="ml-4">
-								password{' '}
-								<span className="text-foreground text-[1.1rem]">
-									{selectedAccount?.password}
-								</span>
-							</p>
-						</div>
-
-						{(selectedAccount?.moreInfo.length ?? 0) > 0 && (
 							<p className="mt-4">
-								<span className="text-foreground">More about the account: </span>{' '}
-								<br />
-								{selectedAccount?.moreInfo}
+								password <br />
+								<span className="text-foreground">{selectedAccount?.password}</span>
 							</p>
-						)}
+
+							{(selectedAccount?.moreInfo.length ?? 0) > 0 && (
+								<p className="mt-4">
+									More about the account: <br />
+									<span className="text-foreground">
+										{selectedAccount?.moreInfo}
+									</span>
+								</p>
+							)}
+						</div>
 					</>
 				) : (
 					'information is locked'
