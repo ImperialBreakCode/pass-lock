@@ -80,8 +80,7 @@ function AccountInfos() {
 				onOpenChange={(open) => setAddAccOpen(open)}
 				title="Add an account"
 				description={`Add the information about your account. 
-					This info will be encrypted when the file containing the keys 
-					is removed from the encryptionKeys folder`}
+					This information will be encrypted when the file containing the keys is removed from the encryptionKeys folder.`}
 			>
 				<AddUpdateAccountForm
 					serviceId={service?.id ?? ''}
@@ -96,7 +95,7 @@ function AccountInfos() {
 				open={updateServiceOpen}
 				onOpenChange={(open) => setUpdateServiceOpen(open)}
 				title="Edit service"
-				description={`Change account collection's name`}
+				description={`Change account collection's name.`}
 			>
 				<AddUpdateServiceForm
 					serviceToUpdate={service}
@@ -111,7 +110,7 @@ function AccountInfos() {
 				open={deleteServiceOpen}
 				onOpenChange={(open) => setDeleteServiceOpen(open)}
 				title="Delete service"
-				description={`Do you want to delete this service with all its account information? If yes, enter the service name: ${service?.name}`}
+				description={`Do you want to delete this service and all its account information? If yes, enter the service name: ${service?.name}`}
 			>
 				{service && (
 					<DeleteServiceForm
@@ -130,8 +129,8 @@ function AccountInfos() {
 						setAccountToUpdate(undefined)
 					}
 				}}
-				title="Update account information"
-				description={`Change account information`}
+				title="Edit account information"
+				description={``}
 			>
 				{accountToUpdate && service && (
 					<AddUpdateAccountForm
@@ -177,7 +176,8 @@ function AccountInfos() {
 
 						{(selectedAccount?.moreInfo.length ?? 0) > 0 && (
 							<p className="mt-4">
-								<span className="text-foreground">More information: </span> <br />
+								<span className="text-foreground">More about the account: </span>{' '}
+								<br />
 								{selectedAccount?.moreInfo}
 							</p>
 						)}
@@ -193,7 +193,8 @@ function AccountInfos() {
 				onDelete={onAccountDelete}
 			>
 				<AlertDestructive>
-					This Action cannot be undone. Are you sure you want to delete this account info?
+					This action cannot be undone. Are you sure you want to delete this account
+					information?
 				</AlertDestructive>
 			</DeleteAccountConfirmationDialog>
 

@@ -43,7 +43,7 @@ function DeleteServiceForm({ onSuccessfullSubmit, service }: DeleteServiceFormPr
 	return (
 		<>
 			<AlertDestructive>
-				{`You're going to delete this service. This action cannot be undone.`}
+				{`You are about to delete this service. This action cannot be undone.`}
 			</AlertDestructive>
 			<Form {...form}>
 				<form onSubmit={form.handleSubmit(onSubmit)} className="space-y-5 mt-5">

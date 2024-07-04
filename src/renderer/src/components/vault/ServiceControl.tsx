@@ -16,7 +16,7 @@ function ServiceControl({ onAddService, onSearch, canEdit }: ServiceControlProps
 				<CardTitle className="text-lg">Account services</CardTitle>
 			</CardHeader>
 			<CardContent className="flex justify-between">
-				<Input onChange={onSearch} placeholder="search..." />
+				<Input onChange={onSearch} placeholder="Search..." />
 
 				{canEdit && (
 					<Button className="ml-5" onClick={onAddService}>

@@ -89,8 +89,8 @@ function AddUpdateAccountForm({
 					control={form.control}
 					name="moreInfo"
 					render={({ field }) => (
-						<FormInputWrapper label="More info about the account">
-							<Textarea {...field} placeholder="info..." />
+						<FormInputWrapper label="More information about the account">
+							<Textarea {...field} placeholder="Info..." />
 						</FormInputWrapper>
 					)}
 				/>

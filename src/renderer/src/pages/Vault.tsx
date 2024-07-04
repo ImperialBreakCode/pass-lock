@@ -43,7 +43,7 @@ function Vault() {
 			<SideSheet
 				open={sideOpen}
 				onOpenChange={(open) => setSideOpen(open)}
-				description="Add an account service (a collection of account infos) where you can safely store passwords and more information about your accounts"
+				description="Add an account service, a collection of account information, where you can safely store passwords and other details about your accounts."
 				title="Add an account service"
 			>
 				<AddUpdateServiceForm
