@@ -5,12 +5,10 @@ import PageWrapper from '@/elements/PageWrapper'
 import { useEffect, useState } from 'react'
 
 function StatusPage() {
-	const [isInital, setIsInital] = useState(false)
 	const [keysExist, setKeysExist] = useState(false)
 
 	useEffect(() => {
 		async function init() {
-			setIsInital(await window.api.checkForInitialState())
 			setKeysExist(window.api.checkForKeys())
 		}
 
@@ -25,7 +23,9 @@ function StatusPage() {
 					<StatusCard unlocked={keysExist} />
 				</div>
 
-				<div>{isInital && <InitialCard />}</div>
+				<div>
+					<InitialCard />
+				</div>
 			</div>
 		</PageWrapper>
 	)

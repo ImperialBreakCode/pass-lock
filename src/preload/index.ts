@@ -12,10 +12,6 @@ const getPaths = (): { passwordStorage: string; keysStorage: string } => {
 	return ipcRenderer.sendSync('getPaths')
 }
 
-const checkForInitialState = async (): Promise<boolean> => {
-	return await ipcRenderer.invoke('checkForInitialState')
-}
-
 const checkForKeys = (): boolean => {
 	return ipcRenderer.sendSync('checkForKeys')
 }
@@ -59,7 +55,6 @@ const deleteAccountInfo = async (accountId: string, serviceId: string): Promise<
 const api = {
 	getPaths,
 	getAppVersion,
-	checkForInitialState,
 	checkForKeys,
 	getAllServices,
 	getService,

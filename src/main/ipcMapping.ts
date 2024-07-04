@@ -16,12 +16,6 @@ export function mapToIpc(ipcMain: IpcMain, container: DependencyContainer) {
 }
 
 function mapHelperService(ipcMain: IpcMain, container: DependencyContainer) {
-	ipcMain.handle('checkForInitialState', async (): Promise<boolean> => {
-		const helperService = container.resolve(HelperService)
-
-		return await helperService.checkForInitialState()
-	})
-
 	ipcMain.on('checkForKeys', (e) => {
 		const helperService = container.resolve(HelperService)
 
