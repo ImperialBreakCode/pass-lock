@@ -6,7 +6,7 @@ import type IAccountEncryption from '../../abstractions/encryption/accountEncryp
 import IAccountInfoService, {
 	InsertAccount
 } from '../../abstractions/services/accountInfoService.interface'
-import { encryptionMessages } from '../constants/messages'
+import { encryptionMessages } from '../../../constants/messages'
 import { EncryptonError } from '../encryption/encryption'
 import ModelFactory from '../../../data/implementation/factories/modelFactory'
 import AccountRepository from '../../../data/implementation/repository/accountRepository'

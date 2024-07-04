@@ -1,6 +1,6 @@
 import IEncryption from '../../abstractions/encryption/encryption.interface'
 import { createCipheriv, createDecipheriv, createHmac, randomBytes } from 'crypto'
-import { encryptionMessages } from '../constants/messages'
+import { encryptionMessages } from '../../../constants/messages'
 import { injectable } from 'tsyringe'
 
 export class EncryptonError extends Error {

@@ -8,6 +8,10 @@ const getAppVersion = (): string => {
 	return ipcRenderer.sendSync('getAppVersion')
 }
 
+const getPaths = (): { passwordStorage: string; keysStorage: string } => {
+	return ipcRenderer.sendSync('getPaths')
+}
+
 const checkForInitialState = async (): Promise<boolean> => {
 	return await ipcRenderer.invoke('checkForInitialState')
 }
@@ -53,6 +57,7 @@ const deleteAccountInfo = async (accountId: string, serviceId: string): Promise<
 
 // Custom APIs for renderer
 const api = {
+	getPaths,
 	getAppVersion,
 	checkForInitialState,
 	checkForKeys,

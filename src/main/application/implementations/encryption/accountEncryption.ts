@@ -3,7 +3,7 @@ import type IKeyManager from '../../../data/abstraction/managers/keyManager.inte
 import AccountInfo from '../../../data/models/accountInfo.type'
 import IAccountEncryption from '../../abstractions/encryption/accountEncryption.interface'
 import type IEncryption from '../../abstractions/encryption/encryption.interface'
-import { encryptionMessages } from '../constants/messages'
+import { encryptionMessages } from '../../../constants/messages'
 import Encrypton, { EncryptonError } from './encryption'
 import KeyManager from '../../../data/implementation/managers/keyManager'
 

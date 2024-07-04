@@ -25,8 +25,9 @@ function StatusCard({ unlocked }: StatusCardProps) {
 				<CardDescription>
 					{unlocked ? (
 						<>
-							To turn on storage encryption, remove the json file containing the
-							locker keys from <i>location</i> and store it somewhere safe.
+							To lock the storage, remove the data.json file containing the locker
+							keys from <b>{window.api.getPaths().keysStorage}</b> and store it
+							somewhere safe.
 						</>
 					) : (
 						<>Encryption is turned on and storage is locked.</>

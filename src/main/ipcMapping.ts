@@ -6,6 +6,8 @@ import ServiceInfo from './data/models/serviceInfo.type'
 import AccountInfoService from './application/implementations/services/accountInfoService'
 import { InsertAccount } from './application/abstractions/services/accountInfoService.interface'
 import AccountInfo from './data/models/accountInfo.type'
+import { appPaths } from './constants/paths'
+import path from 'path'
 
 export function mapToIpc(ipcMain: IpcMain, container: DependencyContainer) {
 	mapHelperService(ipcMain, container)
@@ -28,6 +30,16 @@ function mapHelperService(ipcMain: IpcMain, container: DependencyContainer) {
 
 	ipcMain.on('getAppVersion', (e) => {
 		e.returnValue = app.getVersion()
+	})
+
+	ipcMain.on('getPaths', (e) => {
+		const passPath = path.join(appPaths.mainDataPath, appPaths.passwordStorage)
+		const keysPath = path.join(appPaths.mainDataPath, appPaths.keysStorage)
+
+		e.returnValue = {
+			passwordStorage: passPath,
+			keysStorage: keysPath
+		}
 	})
 }
 
