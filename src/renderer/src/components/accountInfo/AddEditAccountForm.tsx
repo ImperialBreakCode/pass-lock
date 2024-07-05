@@ -17,8 +17,8 @@ interface AddUpdateAccountFormProps {
 }
 
 const formSchema = z.object({
-	username: z.string().min(1, { message: 'Name is required' }).max(25),
-	password: z.string().min(1, { message: 'Password is required' }).max(25),
+	username: z.string().min(1, { message: 'Username is required' }).max(50),
+	password: z.string().min(1, { message: 'Password is required' }).max(50),
 	moreInfo: z.string().max(100)
 })
 
