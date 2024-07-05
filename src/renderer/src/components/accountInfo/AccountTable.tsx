@@ -16,7 +16,7 @@ interface AccountTableProps {
 
 function AccountTable({ data, onClickRow }: AccountTableProps) {
 	return (
-		<div className="mt-4">
+		<div className="my-4">
 			<Table>
 				<TableCaption className="text-left">Account list</TableCaption>
 				<TableHeader>

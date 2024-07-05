@@ -15,6 +15,7 @@ import AccountInformationDialogue from '@/components/accountInfo/AccountInformat
 import AccountInfo from '@/models/accountInfo.type'
 import DeleteAccountConfirmationDialog from '@/components/accountInfo/DeleteAccountConfirmationDialog'
 import AlertDestructive from '@/components/AlertDestructive'
+import { ScrollArea } from '@/components/ui/scroll-area'
 
 function AccountInfos() {
 	const navigate = useNavigate()
@@ -209,7 +210,9 @@ function AccountInfos() {
 				}
 			/>
 
-			<AccountTable data={service?.accounts ?? []} onClickRow={onRowSelected} />
+			<ScrollArea>
+				<AccountTable data={service?.accounts ?? []} onClickRow={onRowSelected} />
+			</ScrollArea>
 		</PageWrapper>
 	)
 }
