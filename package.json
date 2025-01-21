@@ -1,6 +1,6 @@
 {
 	"name": "password-lock",
-	"version": "1.0.0",
+	"version": "1.0.3",
 	"description": "Password manager with local encrypted storage.",
 	"main": "./out/main/index.js",
 	"author": "ImperialBreakCode",
@@ -33,6 +33,7 @@
 		"class-variance-authority": "^0.7.0",
 		"clsx": "^2.1.1",
 		"date-fns": "^3.6.0",
+		"electron-updater": "^6.3.9",
 		"lucide-react": "^0.383.0",
 		"react-day-picker": "^8.10.1",
 		"react-hook-form": "^7.52.0",
