@@ -7,7 +7,7 @@ import { getDiContainer } from './dInjection'
 import { mapToIpc } from './ipcMapping'
 import { preStart } from './preStart'
 
-function createWindow(): void {
+async function createWindow(): Promise<void> {
 	// Create the browser window.
 	const mainWindow = new BrowserWindow({
 		width: 1200,
@@ -35,10 +35,14 @@ function createWindow(): void {
 	// HMR for renderer base on electron-vite cli.
 	// Load the remote URL for development or the local html file for production.
 	if (is.dev && process.env['ELECTRON_RENDERER_URL']) {
-		mainWindow.loadURL(process.env['ELECTRON_RENDERER_URL'])
+		await mainWindow.loadURL(process.env['ELECTRON_RENDERER_URL'])
 	} else {
-		mainWindow.loadFile(join(__dirname, '../renderer/index.html'))
+		await mainWindow.loadFile(join(__dirname, '../renderer/index.html'))
 	}
+
+	// for testing only
+	mainWindow.webContents.openDevTools()
+	mainWindow.webContents.send('update-available')
 }
 
 // This method will be called when Electron has finished
@@ -60,7 +64,7 @@ app.whenReady().then(async () => {
 	await preStart(appContainer)
 	mapToIpc(ipcMain, appContainer)
 
-	createWindow()
+	await createWindow()
 
 	app.on('activate', function () {
 		// On macOS it's common to re-create a window in the app when the

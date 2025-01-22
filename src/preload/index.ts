@@ -63,7 +63,8 @@ const api = {
 	deleteService,
 	addAccountInfo,
 	updateAccountInfo,
-	deleteAccountInfo
+	deleteAccountInfo,
+	onUpdateAvailable: (callback: () => void) => ipcRenderer.on('update-available', callback)
 }
 
 // Use `contextBridge` APIs to expose Electron APIs to
