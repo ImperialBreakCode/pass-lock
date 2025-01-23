@@ -137,6 +137,20 @@ export function mapAutoUpdater(activeMainWindow: BrowserWindow, ipcMain: IpcMain
 	}
 
 	ipcMain.on('install-update', () => {
-		console.log('installing update')
+		if (activeMainWindow) {
+			activeMainWindow.webContents.send('update-downloading', 0)
+
+			setTimeout(() => {
+				activeMainWindow.webContents.send('update-downloading', 50)
+			}, 1000)
+
+			setTimeout(() => {
+				activeMainWindow.webContents.send('update-downloading', 100)
+			}, 2000)
+
+			setTimeout(() => {
+				activeMainWindow.webContents.send('update-downloaded')
+			}, 3000)
+		}
 	})
 }
