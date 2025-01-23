@@ -16,6 +16,7 @@ declare global {
 			updateAccountInfo: (account: AccountInfo, serviceId: string) => Promise<string | void>
 			deleteAccountInfo: (accountId: string, serviceId: string) => Promise<string | void>
 			onUpdateAvailable: (callback: () => void) => void
+			installUpdate: () => void
 		}
 	}
 }

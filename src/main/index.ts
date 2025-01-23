@@ -4,10 +4,12 @@ import { join } from 'path'
 import { electronApp, optimizer, is } from '@electron-toolkit/utils'
 import icon from '../../resources/icon.png?asset'
 import { getDiContainer } from './dInjection'
-import { mapToIpc } from './ipcMapping'
+import { mapAutoUpdater, mapToIpc } from './ipcMapping'
 import { preStart } from './preStart'
 
-async function createWindow(): Promise<void> {
+let activeMainWin: BrowserWindow | null = null
+
+async function createWindow(): Promise<BrowserWindow> {
 	// Create the browser window.
 	const mainWindow = new BrowserWindow({
 		width: 1200,
@@ -27,6 +29,10 @@ async function createWindow(): Promise<void> {
 		mainWindow.show()
 	})
 
+	mainWindow.on('closed', () => {
+		activeMainWin = null
+	})
+
 	mainWindow.webContents.setWindowOpenHandler((details) => {
 		shell.openExternal(details.url)
 		return { action: 'deny' }
@@ -40,9 +46,7 @@ async function createWindow(): Promise<void> {
 		await mainWindow.loadFile(join(__dirname, '../renderer/index.html'))
 	}
 
-	// for testing only
-	mainWindow.webContents.openDevTools()
-	mainWindow.webContents.send('update-available')
+	return mainWindow
 }
 
 // This method will be called when Electron has finished
@@ -64,12 +68,15 @@ app.whenReady().then(async () => {
 	await preStart(appContainer)
 	mapToIpc(ipcMain, appContainer)
 
-	await createWindow()
+	activeMainWin = await createWindow()
+	mapAutoUpdater(activeMainWin, ipcMain)
 
-	app.on('activate', function () {
+	app.on('activate', async function () {
 		// On macOS it's common to re-create a window in the app when the
 		// dock icon is clicked and there are no other windows open.
-		if (BrowserWindow.getAllWindows().length === 0) createWindow()
+		if (BrowserWindow.getAllWindows().length === 0) {
+			activeMainWin = await createWindow()
+		}
 	})
 })
 

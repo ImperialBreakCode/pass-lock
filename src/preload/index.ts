@@ -51,6 +51,10 @@ const deleteAccountInfo = async (accountId: string, serviceId: string): Promise<
 	return await ipcRenderer.invoke('deleteAccountInfo', accountId, serviceId)
 }
 
+const installUpdate = (): void => {
+	ipcRenderer.send('install-update')
+}
+
 // Custom APIs for renderer
 const api = {
 	getPaths,
@@ -64,7 +68,8 @@ const api = {
 	addAccountInfo,
 	updateAccountInfo,
 	deleteAccountInfo,
-	onUpdateAvailable: (callback: () => void) => ipcRenderer.on('update-available', callback)
+	onUpdateAvailable: (callback: () => void) => ipcRenderer.on('update-available', callback),
+	installUpdate
 }
 
 // Use `contextBridge` APIs to expose Electron APIs to

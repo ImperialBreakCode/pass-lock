@@ -1,4 +1,4 @@
-import { IpcMain, app } from 'electron'
+import { BrowserWindow, IpcMain, app } from 'electron'
 import { DependencyContainer } from 'tsyringe'
 import HelperService from './application/implementations/services/helperService'
 import AccountCollectionService from './application/implementations/services/accountCollectionService'
@@ -129,4 +129,14 @@ function mapAccountInfo(ipcMain: IpcMain, container: DependencyContainer) {
 			}
 		}
 	)
+}
+
+export function mapAutoUpdater(activeMainWindow: BrowserWindow, ipcMain: IpcMain) {
+	if (activeMainWindow) {
+		activeMainWindow.webContents.send('update-available')
+	}
+
+	ipcMain.on('install-update', () => {
+		console.log('installing update')
+	})
 }

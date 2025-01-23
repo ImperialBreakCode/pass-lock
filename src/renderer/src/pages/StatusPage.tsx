@@ -20,7 +20,7 @@ function StatusPage() {
 		<PageWrapper>
 			<UpdateAvailableDialog
 				onInstall={() => {
-					console.log('install')
+					window.api.installUpdate()
 				}}
 			/>
 
