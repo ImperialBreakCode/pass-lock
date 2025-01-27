@@ -15,6 +15,11 @@ declare global {
 			addAccountInfo: (newAccount: InsertAccount) => Promise<string | void>
 			updateAccountInfo: (account: AccountInfo, serviceId: string) => Promise<string | void>
 			deleteAccountInfo: (accountId: string, serviceId: string) => Promise<string | void>
+			onUpdateAvailable: (callback: () => void) => void
+			onUpdateDownloading: (callback: (progressPercent: number) => void) => void
+			onUpdateDownloaded: (callback: () => void) => void
+			onUpdateError: (callback: () => void) => void
+			installUpdate: () => void
 		}
 	}
 }

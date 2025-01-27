@@ -1,5 +1,7 @@
 import InitialCard from '@/components/status/InitialCard'
 import StatusCard from '@/components/status/StatusCard'
+import UpdateAvailableDialog from '@/components/status/UpdateAvailableDialog'
+import UpdateDownloadStatus from '@/components/status/UpdateDownloadStatus'
 import PageHeader from '@/elements/PageHeader'
 import PageWrapper from '@/elements/PageWrapper'
 import { useEffect, useState } from 'react'
@@ -17,6 +19,14 @@ function StatusPage() {
 
 	return (
 		<PageWrapper>
+			<UpdateDownloadStatus />
+
+			<UpdateAvailableDialog
+				onInstall={() => {
+					window.api.installUpdate()
+				}}
+			/>
+
 			<PageHeader pageTitle="Status" />
 			<div className="mt-4">
 				<div className="mb-2">

@@ -10,7 +10,7 @@ import {
 import { ErrorDialogueContext } from '@/contexts/ContextWrapper'
 import { Button } from './ui/button'
 
-function ErrorDialogue() {
+function ErrorDialog() {
 	const [message, setMessage] = useContext(ErrorDialogueContext)
 
 	return (
@@ -33,4 +33,4 @@ function ErrorDialogue() {
 	)
 }
 
-export default ErrorDialogue
+export default ErrorDialog
