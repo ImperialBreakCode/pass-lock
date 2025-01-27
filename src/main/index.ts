@@ -7,6 +7,12 @@ import { getDiContainer } from './dInjection'
 import { mapAutoUpdater, mapToIpc } from './ipcMapping'
 import { preStart } from './preStart'
 
+import electronUpdater from 'electron-updater'
+
+const { autoUpdater } = electronUpdater
+autoUpdater.autoDownload = false
+autoUpdater.autoInstallOnAppQuit = true
+
 let activeMainWin: BrowserWindow | null = null
 
 async function createWindow(): Promise<BrowserWindow> {
@@ -69,7 +75,7 @@ app.whenReady().then(async () => {
 	mapToIpc(ipcMain, appContainer)
 
 	activeMainWin = await createWindow()
-	mapAutoUpdater(activeMainWin, ipcMain)
+	mapAutoUpdater(activeMainWin, ipcMain, autoUpdater)
 
 	app.on('activate', async function () {
 		// On macOS it's common to re-create a window in the app when the
@@ -78,6 +84,8 @@ app.whenReady().then(async () => {
 			activeMainWin = await createWindow()
 		}
 	})
+
+	autoUpdater.checkForUpdates()
 })
 
 // Quit when all windows are closed, except on macOS. There, it's common

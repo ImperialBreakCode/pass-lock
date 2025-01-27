@@ -8,6 +8,7 @@ import { InsertAccount } from './application/abstractions/services/accountInfoSe
 import AccountInfo from './data/models/accountInfo.type'
 import { appPaths } from './constants/paths'
 import path from 'path'
+import { type AppUpdater } from 'electron-updater'
 
 export function mapToIpc(ipcMain: IpcMain, container: DependencyContainer) {
 	mapHelperService(ipcMain, container)
@@ -131,24 +132,32 @@ function mapAccountInfo(ipcMain: IpcMain, container: DependencyContainer) {
 	)
 }
 
-export function mapAutoUpdater(activeMainWindow: BrowserWindow, ipcMain: IpcMain) {
+export function mapAutoUpdater(
+	activeMainWindow: BrowserWindow,
+	ipcMain: IpcMain,
+	autoUpdater: AppUpdater
+) {
 	if (activeMainWindow) {
-		activeMainWindow.webContents.send('update-available')
+		autoUpdater.on('update-available', () => {
+			activeMainWindow.webContents.send('update-available')
+		})
+
+		autoUpdater.on('download-progress', (progress) => {
+			activeMainWindow.webContents.send('update-downloading', progress.percent)
+		})
+
+		autoUpdater.on('update-downloaded', () => {
+			activeMainWindow.webContents.send('update-downloaded')
+		})
+
+		autoUpdater.on('error', (error) => {
+			activeMainWindow.webContents.send('update-error')
+
+			dialog.showErrorBox('Error while updating', error.message)
+		})
 	}
 
 	ipcMain.on('install-update', () => {
-		if (activeMainWindow) {
-			activeMainWindow.webContents.send('update-downloading', 0)
-
-			setTimeout(() => {
-				activeMainWindow.webContents.send('update-downloading', 50)
-			}, 1000)
-
-			setTimeout(() => {
-				activeMainWindow.webContents.send('update-error')
-
-				dialog.showErrorBox('error', 'error')
-			}, 3000)
-		}
+		autoUpdater.downloadUpdate()
 	})
 }
