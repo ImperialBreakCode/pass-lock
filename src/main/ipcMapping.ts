@@ -1,4 +1,4 @@
-import { BrowserWindow, IpcMain, app } from 'electron'
+import { BrowserWindow, IpcMain, app, dialog } from 'electron'
 import { DependencyContainer } from 'tsyringe'
 import HelperService from './application/implementations/services/helperService'
 import AccountCollectionService from './application/implementations/services/accountCollectionService'
@@ -145,11 +145,9 @@ export function mapAutoUpdater(activeMainWindow: BrowserWindow, ipcMain: IpcMain
 			}, 1000)
 
 			setTimeout(() => {
-				activeMainWindow.webContents.send('update-downloading', 100)
-			}, 2000)
+				activeMainWindow.webContents.send('update-error')
 
-			setTimeout(() => {
-				activeMainWindow.webContents.send('update-downloaded')
+				dialog.showErrorBox('error', 'error')
 			}, 3000)
 		}
 	})

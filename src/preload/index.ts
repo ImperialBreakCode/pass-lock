@@ -68,10 +68,16 @@ const api = {
 	addAccountInfo,
 	updateAccountInfo,
 	deleteAccountInfo,
+
 	onUpdateAvailable: (callback: () => void) => ipcRenderer.on('update-available', callback),
+
 	onUpdateDownloading: (callback: (progressPercent: number) => void) =>
 		ipcRenderer.on('update-downloading', (_, progress) => callback(progress)),
+
 	onUpdateDownloaded: (callback: () => void) => ipcRenderer.on('update-downloaded', callback),
+
+	onUpdateError: (callback: () => void) => ipcRenderer.on('update-error', callback),
+
 	installUpdate
 }
 

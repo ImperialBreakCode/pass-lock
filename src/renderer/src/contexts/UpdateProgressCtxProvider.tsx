@@ -32,9 +32,16 @@ function UpdateProgressCtxProvider({ children }: UpdateProgressContextProps) {
 		setUpdateStatus(UpdateStatus.Downloaded)
 	}
 
+	const onUpdateErrorHandler = () => {
+		setUpdateStatus(UpdateStatus.NotAvailable)
+		setProgress(0)
+	}
+
 	useEffect(() => {
 		window.api.onUpdateDownloading(onUpdateDownloadingHandler)
 		window.api.onUpdateDownloaded(onUpdateDownloadedHandler)
+
+		window.api.onUpdateError(onUpdateErrorHandler)
 	}, [])
 
 	return (
