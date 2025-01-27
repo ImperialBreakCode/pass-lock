@@ -1,4 +1,3 @@
-import { useEffect, useState } from 'react'
 import { Alert } from '../ui/alert'
 import {
 	AlertDialog,
@@ -11,34 +10,16 @@ import {
 import { Progress } from '../ui/progress'
 import { Button } from '../ui/button'
 import { Check } from 'lucide-react'
-
-enum UpdateStatus {
-	NotAvailable,
-	Downloading,
-	Downloaded
-}
+import {
+	UpdateProgressContext,
+	UpdateStatus,
+	UpdateStatusContext
+} from '@/contexts/UpdateProgressCtxProvider'
+import { useContext } from 'react'
 
 function UpdateDownloadStatus() {
-	const [updateStatus, setUpdateStatus] = useState(UpdateStatus.NotAvailable)
-
-	const [progress, setProgress] = useState(0)
-
-	const onUpdateDownloadingHandler = (progressPercent: number) => {
-		if (updateStatus === UpdateStatus.NotAvailable) {
-			setUpdateStatus(UpdateStatus.Downloading)
-		}
-
-		setProgress(progressPercent)
-	}
-
-	const onUpdateDownloadedHandler = () => {
-		setUpdateStatus(UpdateStatus.Downloaded)
-	}
-
-	useEffect(() => {
-		window.api.onUpdateDownloading(onUpdateDownloadingHandler)
-		window.api.onUpdateDownloaded(onUpdateDownloadedHandler)
-	}, [])
+	const [updateStatus, setUpdateStatus] = useContext(UpdateStatusContext)
+	const progress = useContext(UpdateProgressContext)
 
 	return (
 		<AlertDialog open={updateStatus !== UpdateStatus.NotAvailable}>
@@ -70,7 +51,17 @@ function UpdateDownloadStatus() {
 					</AlertDialogDescription>
 				</AlertDialogHeader>
 				<AlertDialogFooter>
-					<Button onClick={() => setUpdateStatus(UpdateStatus.NotAvailable)}>Ok</Button>
+					{updateStatus === UpdateStatus.Downloaded ? (
+						<Button
+							onClick={() =>
+								setUpdateStatus ? setUpdateStatus(UpdateStatus.NotAvailable) : null
+							}
+						>
+							Ok
+						</Button>
+					) : (
+						''
+					)}
 				</AlertDialogFooter>
 			</AlertDialogContent>
 		</AlertDialog>

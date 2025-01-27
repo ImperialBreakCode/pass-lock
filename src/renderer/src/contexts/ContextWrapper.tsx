@@ -1,4 +1,5 @@
 import { Dispatch, ReactNode, SetStateAction, createContext, useEffect, useState } from 'react'
+import UpdateProgressCtxProvider from './UpdateProgressCtxProvider'
 
 interface ContextWrapperProps {
 	children: ReactNode
@@ -22,9 +23,11 @@ function ContextWrapper({ children }: ContextWrapperProps) {
 
 	return (
 		<UpdateAvailableContext.Provider value={[updateAvailable, setUpdateAvailable]}>
-			<ErrorDialogueContext.Provider value={[error, setError]}>
-				{children}
-			</ErrorDialogueContext.Provider>
+			<UpdateProgressCtxProvider>
+				<ErrorDialogueContext.Provider value={[error, setError]}>
+					{children}
+				</ErrorDialogueContext.Provider>
+			</UpdateProgressCtxProvider>
 		</UpdateAvailableContext.Provider>
 	)
 }
