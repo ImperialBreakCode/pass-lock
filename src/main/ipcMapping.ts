@@ -1,4 +1,4 @@
-import { BrowserWindow, IpcMain, app, dialog } from 'electron'
+import { BrowserWindow, IpcMain, app, dialog, shell } from 'electron'
 import { DependencyContainer } from 'tsyringe'
 import HelperService from './application/implementations/services/helperService'
 import AccountCollectionService from './application/implementations/services/accountCollectionService'
@@ -35,6 +35,18 @@ function mapHelperService(ipcMain: IpcMain, container: DependencyContainer) {
 			passwordStorage: passPath,
 			keysStorage: keysPath
 		}
+	})
+
+	ipcMain.on('open-keys-folder', () => {
+		const keysPath = path.join(appPaths.mainDataPath, appPaths.keysStorage)
+
+		shell.openPath(keysPath)
+	})
+
+	ipcMain.on('open-storage-folder', () => {
+		const passPath = path.join(appPaths.mainDataPath, appPaths.passwordStorage)
+
+		shell.openPath(passPath)
 	})
 }
 

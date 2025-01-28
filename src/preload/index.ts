@@ -55,6 +55,14 @@ const installUpdate = (): void => {
 	ipcRenderer.send('install-update')
 }
 
+const openKeysFolder = (): void => {
+	ipcRenderer.send('open-keys-folder')
+}
+
+const openStorageFolder = (): void => {
+	ipcRenderer.send('open-storage-folder')
+}
+
 // Custom APIs for renderer
 const api = {
 	getPaths,
@@ -78,7 +86,9 @@ const api = {
 
 	onUpdateError: (callback: () => void) => ipcRenderer.on('update-error', callback),
 
-	installUpdate
+	installUpdate,
+	openKeysFolder,
+	openStorageFolder
 }
 
 // Use `contextBridge` APIs to expose Electron APIs to
