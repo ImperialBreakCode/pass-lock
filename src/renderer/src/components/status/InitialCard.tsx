@@ -1,6 +1,7 @@
 import { Info } from 'lucide-react'
 import { Card, CardDescription, CardHeader, CardTitle } from '../ui/card'
 import { Separator } from '@radix-ui/react-separator'
+import { Button } from '../ui/button'
 
 function InitialCard() {
 	return (
@@ -23,6 +24,21 @@ function InitialCard() {
 						Store the keys file somewhere safe. If you lose them you will not be able to
 						recover your data.
 					</b>
+					<div className="mt-5 flex">
+						<Button
+							variant={'secondary'}
+							className="ms-auto me-3"
+							onClick={() => window.api.openKeysFolder()}
+						>
+							Open keys folder
+						</Button>
+						<Button
+							variant={'secondary'}
+							onClick={() => window.api.openStorageFolder()}
+						>
+							Open storage folder
+						</Button>
+					</div>
 				</CardDescription>
 			</CardHeader>
 		</Card>
