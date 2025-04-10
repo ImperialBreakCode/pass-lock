@@ -1,6 +1,5 @@
 import { BrowserWindow, IpcMain, app, dialog, shell } from 'electron'
 import { DependencyContainer } from 'tsyringe'
-import HelperService from './application/implementations/services/helperService'
 import AccountCollectionService from './application/implementations/services/accountCollectionService'
 import ServiceInfo from './data/models/serviceInfo.type'
 import AccountInfoService from './application/implementations/services/accountInfoService'
@@ -11,18 +10,12 @@ import path from 'path'
 import { type AppUpdater } from 'electron-updater'
 
 export function mapToIpc(ipcMain: IpcMain, container: DependencyContainer) {
-	mapHelperService(ipcMain, container)
+	mapHelperService(ipcMain)
 	mapAccountCollection(ipcMain, container)
 	mapAccountInfo(ipcMain, container)
 }
 
-function mapHelperService(ipcMain: IpcMain, container: DependencyContainer) {
-	ipcMain.on('checkForKeys', (e) => {
-		const helperService = container.resolve(HelperService)
-
-		e.returnValue = helperService.checkForKeys()
-	})
-
+function mapHelperService(ipcMain: IpcMain) {
 	ipcMain.on('getAppVersion', (e) => {
 		e.returnValue = app.getVersion()
 	})

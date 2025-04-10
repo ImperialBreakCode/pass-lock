@@ -16,11 +16,14 @@ import AccountInfo from '@/models/accountInfo.type'
 import DeleteAccountConfirmationDialog from '@/components/accountInfo/DeleteAccountConfirmationDialog'
 import AlertDestructive from '@/components/AlertDestructive'
 import { ScrollArea } from '@/components/ui/scroll-area'
+import { KeysContext } from '@/contexts/KeysContextProvider'
 
 function AccountInfos() {
 	const navigate = useNavigate()
 
 	const [searchParams] = useSearchParams()
+
+	const [keys] = useContext(KeysContext)
 
 	const [service, setService] = useState<ServiceInfo | undefined>()
 	const [canEdit, setCanEdit] = useState(false)
@@ -45,7 +48,7 @@ function AccountInfos() {
 			setService(result as ServiceInfo)
 		}
 
-		setCanEdit(window.api.checkForKeys())
+		setCanEdit(keys !== null)
 	}
 
 	const onRowSelected = (id: string) => {

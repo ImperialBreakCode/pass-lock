@@ -9,9 +9,11 @@ import { useContext, useEffect, useState } from 'react'
 import { ErrorDialogueContext } from '@/contexts/ContextWrapper'
 import ServiceInfo from '@/models/serviceInfo.type'
 import AddUpdateServiceForm from '@/components/AddUpdateServiceForm'
+import { KeysContext } from '@/contexts/KeysContextProvider'
 
 function Vault() {
 	const [, setErrorMessage] = useContext(ErrorDialogueContext)
+	const [keys] = useContext(KeysContext)
 
 	const [sideOpen, setSideOpen] = useState(false)
 	const [services, setServices] = useState<ServiceInfo[]>([])
@@ -31,7 +33,7 @@ function Vault() {
 			setServices(result as ServiceInfo[])
 		}
 
-		setCanEdit(window.api.checkForKeys())
+		setCanEdit(keys !== null)
 	}
 
 	useEffect(() => {

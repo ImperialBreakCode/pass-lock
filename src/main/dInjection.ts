@@ -21,8 +21,6 @@ import IStartupManager from './application/abstractions/startup/startupManager.i
 import StartupManager from './application/implementations/startup/startupManager'
 import IPasswordStorageObserver from './data/abstraction/fileStorage/passwordStorageObserver.interface'
 import PasswordStorageObserver from './application/implementations/passwordStorageObserver'
-import HelperService from './application/implementations/services/helperService'
-import IHelperService from './application/abstractions/services/helperService.interface'
 
 export function getDiContainer(): DependencyContainer {
 	// data layer
@@ -65,10 +63,6 @@ export function getDiContainer(): DependencyContainer {
 
 	container.register<IPasswordStorageObserver>(PasswordStorageObserver, {
 		useClass: PasswordStorageObserver
-	})
-
-	container.register<IHelperService>(HelperService, {
-		useClass: HelperService
 	})
 
 	container.register<IStartupManager>(StartupManager, {

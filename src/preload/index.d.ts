@@ -6,7 +6,6 @@ declare global {
 		api: {
 			getPaths: () => { passwordStorage: string; keysStorage: string }
 			getAppVersion: () => string
-			checkForKeys: () => boolean
 			getAllServices: () => Promise<ServiceInfo[] | string>
 			getService: (serviceId: string) => Promise<ServiceInfo | undefined | string>
 			insertService: (serviceName: string) => Promise<string | void>

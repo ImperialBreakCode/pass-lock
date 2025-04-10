@@ -2,16 +2,19 @@ import InitialCard from '@/components/status/InitialCard'
 import StatusCard from '@/components/status/StatusCard'
 import UpdateAvailableDialog from '@/components/status/UpdateAvailableDialog'
 import UpdateDownloadStatus from '@/components/status/UpdateDownloadStatus'
+import { KeysContext } from '@/contexts/KeysContextProvider'
 import PageHeader from '@/elements/PageHeader'
 import PageWrapper from '@/elements/PageWrapper'
-import { useEffect, useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
 
 function StatusPage() {
+	const [keys] = useContext(KeysContext)
+
 	const [keysExist, setKeysExist] = useState(false)
 
 	useEffect(() => {
 		async function init() {
-			setKeysExist(window.api.checkForKeys())
+			setKeysExist(keys !== null)
 		}
 
 		init()

@@ -12,10 +12,6 @@ const getPaths = (): { passwordStorage: string; keysStorage: string } => {
 	return ipcRenderer.sendSync('getPaths')
 }
 
-const checkForKeys = (): boolean => {
-	return ipcRenderer.sendSync('checkForKeys')
-}
-
 const getAllServices = async (): Promise<ServiceInfo[] | string> => {
 	return await ipcRenderer.invoke('getAllServices')
 }
@@ -67,7 +63,6 @@ const openStorageFolder = (): void => {
 const api = {
 	getPaths,
 	getAppVersion,
-	checkForKeys,
 	getAllServices,
 	getService,
 	insertService,
