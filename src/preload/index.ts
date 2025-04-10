@@ -51,10 +51,6 @@ const installUpdate = (): void => {
 	ipcRenderer.send('install-update')
 }
 
-const openKeysFolder = (): void => {
-	ipcRenderer.send('open-keys-folder')
-}
-
 const openStorageFolder = (): void => {
 	ipcRenderer.send('open-storage-folder')
 }
@@ -82,7 +78,6 @@ const api = {
 	onUpdateError: (callback: () => void) => ipcRenderer.on('update-error', callback),
 
 	installUpdate,
-	openKeysFolder,
 	openStorageFolder
 }
 

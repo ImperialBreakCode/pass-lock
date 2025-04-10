@@ -22,18 +22,10 @@ function mapHelperService(ipcMain: IpcMain) {
 
 	ipcMain.on('getPaths', (e) => {
 		const passPath = path.join(appPaths.mainDataPath, appPaths.passwordStorage)
-		const keysPath = path.join(appPaths.mainDataPath, appPaths.keysStorage)
 
 		e.returnValue = {
 			passwordStorage: passPath,
-			keysStorage: keysPath
 		}
-	})
-
-	ipcMain.on('open-keys-folder', () => {
-		const keysPath = path.join(appPaths.mainDataPath, appPaths.keysStorage)
-
-		shell.openPath(keysPath)
 	})
 
 	ipcMain.on('open-storage-folder', () => {

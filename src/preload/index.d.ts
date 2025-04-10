@@ -19,7 +19,6 @@ declare global {
 			onUpdateDownloaded: (callback: () => void) => void
 			onUpdateError: (callback: () => void) => void
 			installUpdate: () => void
-			openKeysFolder: () => void
 			openStorageFolder: () => void
 		}
 	}
