@@ -1,7 +1,7 @@
 import AppNavLink from '@/elements/AppNavLink'
 import LeftNavMenuBox from '@/elements/LeftNavMenuBox'
 import { routes } from '@/routes'
-import { Info, Shield, Vault } from 'lucide-react'
+import { Cog, Info, Shield, Vault } from 'lucide-react'
 import transparentIcon from '@/assets/transparentIcon.svg'
 
 function NavMenu() {
@@ -20,6 +20,9 @@ function NavMenu() {
 					<AppNavLink to={routes.vault}>
 						<Vault className="inline w-5" />{' '}
 						<span className="pl-3">Password vault</span>
+					</AppNavLink>
+					<AppNavLink to={routes.settings}>
+						<Cog className="inline w-5" /> <span className="pl-3">Settings</span>
 					</AppNavLink>
 					<AppNavLink to={routes.about}>
 						<Info className="inline w-5" /> <span className="pl-3">About</span>
