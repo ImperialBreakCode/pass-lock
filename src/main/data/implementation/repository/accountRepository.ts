@@ -2,11 +2,16 @@ import IAccountRepository from '../../abstraction/repository/accountRepository.i
 import AccountInfo from '../../models/accountInfo.type'
 import type IPasswordStorage from '../../abstraction/fileStorage/passwordStorage.interface'
 import { autoInjectable, inject } from 'tsyringe'
-import PasswordManager from '../managers/passwordManager'
+import type IFileStorageFactory from '../../abstraction/factories/fileStorageFactory.interface'
+import FileStorageFactory from '../factories/fileStorageFactory'
 
 @autoInjectable()
 class AccountRepository implements IAccountRepository {
-	constructor(@inject(PasswordManager) private readonly passwordStorage: IPasswordStorage) {}
+	private readonly passwordStorage: IPasswordStorage
+
+	constructor(@inject(FileStorageFactory) storageFactory: IFileStorageFactory) {
+		this.passwordStorage = storageFactory.createPasswordFileStorage()
+	}
 
 	public async getFirst(): Promise<AccountInfo | undefined> {
 		const data = await this.passwordStorage.readData()

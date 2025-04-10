@@ -40,7 +40,7 @@ function AccountInfos() {
 
 	const fetchData = async () => {
 		const serviceId = searchParams.get('serviceId')
-		const result = await window.api.getService(serviceId!)
+		const result = await window.api.getService(serviceId!, keys)
 
 		if (typeof result === 'string' && setErrorMessage) {
 			setErrorMessage(result)

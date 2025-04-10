@@ -3,6 +3,7 @@ import { electronAPI } from '@electron-toolkit/preload'
 import ServiceInfo from '../main/data/models/serviceInfo.type'
 import { InsertAccount } from '../main/application/abstractions/services/accountInfoService.interface'
 import AccountInfo from '../main/data/models/accountInfo.type'
+import EncryptionKeys from '../main/application/models/encryptionKeys.type'
 
 const getAppVersion = (): string => {
 	return ipcRenderer.sendSync('getAppVersion')
@@ -16,8 +17,11 @@ const getAllServices = async (): Promise<ServiceInfo[] | string> => {
 	return await ipcRenderer.invoke('getAllServices')
 }
 
-const getService = async (serviceId: string): Promise<ServiceInfo | undefined | string> => {
-	return await ipcRenderer.invoke('getService', serviceId)
+const getService = async (
+	serviceId: string,
+	keys: EncryptionKeys | null
+): Promise<ServiceInfo | undefined | string> => {
+	return await ipcRenderer.invoke('getService', serviceId, keys)
 }
 
 const insertService = async (serviceName: string): Promise<string | void> => {
@@ -32,15 +36,19 @@ const deleteService = async (serviceId: string): Promise<string | void> => {
 	return await ipcRenderer.invoke('deleteService', serviceId)
 }
 
-const addAccountInfo = async (newAccount: InsertAccount): Promise<string | void> => {
-	return await ipcRenderer.invoke('addAccountInfo', newAccount)
+const addAccountInfo = async (
+	newAccount: InsertAccount,
+	keys: EncryptionKeys
+): Promise<string | void> => {
+	return await ipcRenderer.invoke('addAccountInfo', newAccount, keys)
 }
 
 const updateAccountInfo = async (
 	account: AccountInfo,
-	serviceId: string
+	serviceId: string,
+	keys: EncryptionKeys
 ): Promise<string | void> => {
-	return await ipcRenderer.invoke('updateAccountInfo', account, serviceId)
+	return await ipcRenderer.invoke('updateAccountInfo', account, serviceId, keys)
 }
 
 const deleteAccountInfo = async (accountId: string, serviceId: string): Promise<string | void> => {

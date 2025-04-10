@@ -7,12 +7,22 @@ declare global {
 			getPaths: () => { passwordStorage: string; keysStorage: string }
 			getAppVersion: () => string
 			getAllServices: () => Promise<ServiceInfo[] | string>
-			getService: (serviceId: string) => Promise<ServiceInfo | undefined | string>
+			getService: (
+				serviceId: string,
+				keys: EncyptionKeys | null
+			) => Promise<ServiceInfo | undefined | string>
 			insertService: (serviceName: string) => Promise<string | void>
 			updateService: (serviceId: string, serviceName: string) => Promise<string | void>
 			deleteService: (serviceId: string) => Promise<string | void>
-			addAccountInfo: (newAccount: InsertAccount) => Promise<string | void>
-			updateAccountInfo: (account: AccountInfo, serviceId: string) => Promise<string | void>
+			addAccountInfo: (
+				newAccount: InsertAccount,
+				keys: EncryptionKeys
+			) => Promise<string | void>
+			updateAccountInfo: (
+				account: AccountInfo,
+				serviceId: string,
+				keys: EncryptionKeys
+			) => Promise<string | void>
 			deleteAccountInfo: (accountId: string, serviceId: string) => Promise<string | void>
 			onUpdateAvailable: (callback: () => void) => void
 			onUpdateDownloading: (callback: (progressPercent: number) => void) => void

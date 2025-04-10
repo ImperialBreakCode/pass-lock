@@ -8,6 +8,7 @@ import AccountInfo from './data/models/accountInfo.type'
 import { appPaths } from './constants/paths'
 import path from 'path'
 import { type AppUpdater } from 'electron-updater'
+import EncryptionKeys from './application/models/encryptionKeys.type'
 
 export function mapToIpc(ipcMain: IpcMain, container: DependencyContainer) {
 	mapHelperService(ipcMain)
@@ -24,7 +25,7 @@ function mapHelperService(ipcMain: IpcMain) {
 		const passPath = path.join(appPaths.mainDataPath, appPaths.passwordStorage)
 
 		e.returnValue = {
-			passwordStorage: passPath,
+			passwordStorage: passPath
 		}
 	})
 
@@ -48,10 +49,14 @@ function mapAccountCollection(ipcMain: IpcMain, container: DependencyContainer) 
 
 	ipcMain.handle(
 		'getService',
-		async (_, serviceId: string): Promise<ServiceInfo | undefined | string> => {
+		async (
+			_,
+			serviceId: string,
+			keys: EncryptionKeys | null
+		): Promise<ServiceInfo | undefined | string> => {
 			const accCollectionService = container.resolve(AccountCollectionService)
 			try {
-				return await accCollectionService.getOne(serviceId)
+				return await accCollectionService.getOne(serviceId, keys)
 			} catch (error) {
 				return (error as Error).message
 			}
@@ -94,26 +99,29 @@ function mapAccountCollection(ipcMain: IpcMain, container: DependencyContainer) 
 function mapAccountInfo(ipcMain: IpcMain, container: DependencyContainer) {
 	ipcMain.handle(
 		'addAccountInfo',
-		async (_, newAccount: InsertAccount): Promise<string | void> => {
+		async (_, newAccount: InsertAccount, keys: EncryptionKeys): Promise<string | void> => {
 			const accInfoService = container.resolve(AccountInfoService)
 
 			try {
-				return await accInfoService.insertOneAccount(newAccount)
+				return await accInfoService.insertOneAccount(newAccount, keys)
 			} catch (error) {
 				return (error as Error).message
 			}
 		}
 	)
 
-	ipcMain.handle('updateAccountInfo', async (_, account: AccountInfo, serviceId: string) => {
-		const accInfoService = container.resolve(AccountInfoService)
+	ipcMain.handle(
+		'updateAccountInfo',
+		async (_, account: AccountInfo, serviceId: string, keys: EncryptionKeys) => {
+			const accInfoService = container.resolve(AccountInfoService)
 
-		try {
-			return await accInfoService.updateOneAccount(account, serviceId)
-		} catch (error) {
-			return (error as Error).message
+			try {
+				return await accInfoService.updateOneAccount(account, serviceId, keys)
+			} catch (error) {
+				return (error as Error).message
+			}
 		}
-	})
+	)
 
 	ipcMain.handle(
 		'deleteAccountInfo',
