@@ -36,6 +36,20 @@ class ServiceRepository implements IServiceRepository {
 		return true
 	}
 
+	public async insertMany(services: ServiceInfo[]): Promise<boolean> {
+		const data = await this.passwordStorage.readData()
+		const existingIds = new Set(data.map((s) => s.id))
+
+		if (services.some((s) => existingIds.has(s.id))) {
+			return false
+		}
+
+		data.push(...services)
+		this.passwordStorage.save(data)
+
+		return true
+	}
+
 	public async updateOne(service: ServiceInfo): Promise<boolean> {
 		const data = await this.passwordStorage.readData()
 

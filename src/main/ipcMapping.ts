@@ -198,6 +198,26 @@ function mapDataManagement(
 			return (error as Error).message
 		}
 	})
+
+	ipcMain.handle('importData', async (_, keys: EncryptionKeys): Promise<string | void> => {
+		const { canceled, filePaths } = await dialog.showOpenDialog(activeMainWindow!, {
+			title: 'Select a File',
+			properties: ['openFile'],
+			filters: [{ name: 'JSON Files', extensions: ['json'] }]
+		})
+
+		if (canceled) {
+			return
+		}
+
+		const dataService = container.resolve(DataManagementService)
+
+		try {
+			return await dataService.importAndEncryptData(keys, filePaths[0])
+		} catch (error) {
+			return (error as Error).message
+		}
+	})
 }
 
 export function mapAutoUpdater(

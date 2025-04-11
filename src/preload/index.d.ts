@@ -28,6 +28,7 @@ declare global {
 			deleteAccountInfo: (accountId: string, serviceId: string) => Promise<string | void>
 			tryDecription: (keys: EncryptionKeys) => Promise<string | void>
 			exportData: (keys: EncryptionKeys) => Promise<string | void>
+			importData: (keys: EncryptionKeys) => Promise<string | void>
 			onUpdateAvailable: (callback: () => void) => void
 			onUpdateDownloading: (callback: (progressPercent: number) => void) => void
 			onUpdateDownloaded: (callback: () => void) => void

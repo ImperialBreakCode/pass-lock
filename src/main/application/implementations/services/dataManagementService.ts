@@ -8,7 +8,8 @@ import type IAccountRepository from '../../../data/abstraction/repository/accoun
 import { EncryptonError } from '../encryption/encryption'
 import ServiceRepository from '../../../data/implementation/repository/serviceRepository'
 import type IServiceRepository from '../../../data/abstraction/repository/serviceRepository.interface'
-import { writeFile } from 'fs/promises'
+import { readFile, writeFile } from 'fs/promises'
+import ServiceInfo from '../../../data/models/serviceInfo.type'
 
 @injectable()
 class DataManagementService implements IDataManagementService {
@@ -18,10 +19,24 @@ class DataManagementService implements IDataManagementService {
 		@inject(ServiceRepository) private readonly serviceRepo: IServiceRepository
 	) {}
 
-	public async exportAndDecryptData(
-		keys: EncryptionKeys,
-		fullPath: string
-	): Promise<string | void> {
+	public async importAndEncryptData(keys: EncryptionKeys, fullPath: string): Promise<void> {
+		const importedJsonData = await readFile(fullPath, 'utf8')
+
+		const importedData = JSON.parse(importedJsonData) as ServiceInfo[]
+
+		for (let i = 0; i < importedData.length; i++) {
+			importedData[i].id = crypto.randomUUID()
+
+			for (let j = 0; j < importedData[i].accounts.length; j++) {
+				importedData[i].accounts[j].id = crypto.randomUUID()
+				await this.encryptor.encryptSingleAccount(importedData[i].accounts[j], keys)
+			}
+		}
+
+		await this.serviceRepo.insertMany(importedData)
+	}
+
+	public async exportAndDecryptData(keys: EncryptionKeys, fullPath: string): Promise<void> {
 		const data = await this.serviceRepo.getAll()
 
 		for (let i = 0; i < data.length; i++) {
@@ -29,8 +44,6 @@ class DataManagementService implements IDataManagementService {
 		}
 
 		await writeFile(fullPath, JSON.stringify(data))
-
-		return
 	}
 
 	public async tryDecription(keys: EncryptionKeys): Promise<string | void> {
