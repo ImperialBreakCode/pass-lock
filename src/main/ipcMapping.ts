@@ -12,12 +12,16 @@ import EncryptionKeys from './application/models/encryptionKeys.type'
 import Encrypton from './application/implementations/encryption/encryption'
 import DataManagementService from './application/implementations/services/DataManagementService'
 
-export function mapToIpc(ipcMain: IpcMain, container: DependencyContainer) {
+export function mapToIpc(
+	ipcMain: IpcMain,
+	container: DependencyContainer,
+	activeMainWindow: BrowserWindow | null
+) {
 	mapHelperService(ipcMain)
 	mapAccountCollection(ipcMain, container)
 	mapAccountInfo(ipcMain, container)
 	mapEncyrption(ipcMain, container)
-	mapDataManagement(ipcMain, container)
+	mapDataManagement(ipcMain, container, activeMainWindow)
 }
 
 function mapHelperService(ipcMain: IpcMain) {
@@ -160,12 +164,36 @@ function mapAccountInfo(ipcMain: IpcMain, container: DependencyContainer) {
 	)
 }
 
-function mapDataManagement(ipcMain: IpcMain, container: DependencyContainer) {
+function mapDataManagement(
+	ipcMain: IpcMain,
+	container: DependencyContainer,
+	activeMainWindow: BrowserWindow | null
+) {
 	ipcMain.handle('tryDecryption', async (_, keys: EncryptionKeys): Promise<string | void> => {
 		const dataService = container.resolve(DataManagementService)
 
 		try {
 			return await dataService.tryDecription(keys)
+		} catch (error) {
+			return (error as Error).message
+		}
+	})
+
+	ipcMain.handle('exportData', async (_, keys: EncryptionKeys): Promise<string | void> => {
+		const { canceled, filePath } = await dialog.showSaveDialog(activeMainWindow!, {
+			title: 'Save Your File',
+			defaultPath: 'decryptedAccountInfo.json',
+			buttonLabel: 'Export Data',
+			filters: [{ name: 'JSON Files', extensions: ['json'] }]
+		})
+
+		if (canceled) {
+			return
+		}
+
+		const dataService = container.resolve(DataManagementService)
+		try {
+			return await dataService.exportAndDecryptData(keys, filePath)
 		} catch (error) {
 			return (error as Error).message
 		}

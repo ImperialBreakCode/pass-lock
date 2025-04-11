@@ -67,6 +67,10 @@ const tryDecription = async (keys: EncryptionKeys): Promise<string | void> => {
 	return await ipcRenderer.invoke('tryDecryption', keys)
 }
 
+const exportData = async (keys: EncryptionKeys): Promise<string | void> => {
+	return await ipcRenderer.invoke('exportData', keys)
+}
+
 const installUpdate = (): void => {
 	ipcRenderer.send('install-update')
 }
@@ -90,6 +94,7 @@ const api = {
 	updateAccountInfo,
 	deleteAccountInfo,
 	tryDecription,
+	exportData,
 
 	onUpdateAvailable: (callback: () => void) => ipcRenderer.on('update-available', callback),
 

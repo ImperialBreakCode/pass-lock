@@ -1,8 +1,12 @@
+import { useContext } from 'react'
 import { Button } from '../ui/button'
 import { Card, CardDescription, CardHeader, CardTitle } from '../ui/card'
 import { Separator } from '../ui/separator'
+import { KeysContext } from '@/contexts/KeysContextProvider'
 
 function DataCard() {
+	const [keys] = useContext(KeysContext)
+
 	return (
 		<Card className="border-border">
 			<CardHeader>
@@ -13,7 +17,13 @@ function DataCard() {
 					import, your current password will be replaced, and the existing data will be
 					backed up at the following location:
 					<div className="mt-5 flex">
-						<Button variant={'secondary'} className="ms-auto me-3">
+						<Button
+							onClick={async () => {
+								await window.api.exportData(keys)
+							}}
+							variant={'secondary'}
+							className="ms-auto me-3"
+						>
 							Export data
 						</Button>
 						<Button variant={'secondary'}>Import data</Button>
