@@ -10,12 +10,14 @@ import path from 'path'
 import { type AppUpdater } from 'electron-updater'
 import EncryptionKeys from './application/models/encryptionKeys.type'
 import Encrypton from './application/implementations/encryption/encryption'
+import DataManagementService from './application/implementations/services/DataManagementService'
 
 export function mapToIpc(ipcMain: IpcMain, container: DependencyContainer) {
 	mapHelperService(ipcMain)
 	mapAccountCollection(ipcMain, container)
 	mapAccountInfo(ipcMain, container)
 	mapEncyrption(ipcMain, container)
+	mapDataManagement(ipcMain, container)
 }
 
 function mapHelperService(ipcMain: IpcMain) {
@@ -156,6 +158,18 @@ function mapAccountInfo(ipcMain: IpcMain, container: DependencyContainer) {
 			}
 		}
 	)
+}
+
+function mapDataManagement(ipcMain: IpcMain, container: DependencyContainer) {
+	ipcMain.handle('tryDecryption', async (_, keys: EncryptionKeys): Promise<string | void> => {
+		const dataService = container.resolve(DataManagementService)
+
+		try {
+			return await dataService.tryDecription(keys)
+		} catch (error) {
+			return (error as Error).message
+		}
+	})
 }
 
 export function mapAutoUpdater(

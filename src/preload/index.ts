@@ -63,6 +63,10 @@ const deleteAccountInfo = async (accountId: string, serviceId: string): Promise<
 	return await ipcRenderer.invoke('deleteAccountInfo', accountId, serviceId)
 }
 
+const tryDecription = async (keys: EncryptionKeys): Promise<string | void> => {
+	return await ipcRenderer.invoke('tryDecryption', keys)
+}
+
 const installUpdate = (): void => {
 	ipcRenderer.send('install-update')
 }
@@ -85,6 +89,7 @@ const api = {
 	addAccountInfo,
 	updateAccountInfo,
 	deleteAccountInfo,
+	tryDecription,
 
 	onUpdateAvailable: (callback: () => void) => ipcRenderer.on('update-available', callback),
 
