@@ -1,5 +1,12 @@
 import IEncryption from '../../abstractions/encryption/encryption.interface'
-import { createCipheriv, createDecipheriv, createHash, createHmac, pbkdf2Sync, randomBytes } from 'crypto'
+import {
+	createCipheriv,
+	createDecipheriv,
+	createHash,
+	createHmac,
+	pbkdf2Sync,
+	randomBytes
+} from 'crypto'
 import { encryptionMessages } from '../../../constants/messages'
 import { inject, injectable } from 'tsyringe'
 import EncryptionKeys from '../../models/encryptionKeys.type'
@@ -35,7 +42,7 @@ class Encrypton implements IEncryption {
 
 	public deriveKeys(masterPassword: string): EncryptionKeys {
 		const passwordBuffer = Buffer.from(masterPassword, 'utf8')
-		const salt = createHash('sha256').update(masterPassword).digest();
+		const salt = createHash('sha256').update(masterPassword).digest()
 
 		const derived = pbkdf2Sync(passwordBuffer, salt, 150_000, 64, 'sha512')
 		const key = derived.subarray(0, 32).toString('base64')
@@ -106,7 +113,7 @@ class Encrypton implements IEncryption {
 			.update(ivBuffer.toString('base64') + encryptedBuffer.toString('base64'))
 			.digest()
 
-		if (hmacDigest !== hmacDigestVerify) {
+		if (hmacDigest.toString('base64') !== hmacDigestVerify.toString('base64')) {
 			throw new EncryptonError(encryptionMessages.dataVeryficationFailed)
 		}
 

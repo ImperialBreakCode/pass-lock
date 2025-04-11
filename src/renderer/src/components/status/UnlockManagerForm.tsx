@@ -30,9 +30,9 @@ function UnlockManagerForm({ onSuccessfullSubmit }: UnlockManagerFormProps) {
 		const keys = window.api.deriveKeys(data.masterPassword)
 
 		const testResult = await window.api.tryDecription(keys)
-		if (!testResult) {
-			if (setError) {
-				setError(testResult!)
+		if (testResult) {
+			if (setError && testResult === 'Data verification failed') {
+				setError('Master password is incorrect. Please try again.')
 			}
 
 			return
