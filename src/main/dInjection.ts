@@ -18,7 +18,7 @@ import StartupManager from './application/implementations/startup/startupManager
 import IApplicationModelFactory from './application/abstractions/factories/applicationModelFactory.interface'
 import ApplicationModelFactory from './application/implementations/factories/applicationModelFactory'
 import IDataManagementService from './application/abstractions/services/dataManagementService.interface'
-import DataManagementService from './application/implementations/services/DataManagementService'
+import DataManagementService from './application/implementations/services/dataManagementService'
 
 export function getDiContainer(): DependencyContainer {
 	// data layer

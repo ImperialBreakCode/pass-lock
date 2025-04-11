@@ -10,7 +10,7 @@ import path from 'path'
 import { type AppUpdater } from 'electron-updater'
 import EncryptionKeys from './application/models/encryptionKeys.type'
 import Encrypton from './application/implementations/encryption/encryption'
-import DataManagementService from './application/implementations/services/DataManagementService'
+import DataManagementService from './application/implementations/services/dataManagementService'
 
 export function mapToIpc(
 	ipcMain: IpcMain,
