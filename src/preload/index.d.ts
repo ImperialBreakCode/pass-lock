@@ -6,6 +6,7 @@ declare global {
 		api: {
 			getPaths: () => { passwordStorage: string; keysStorage: string }
 			getAppVersion: () => string
+			deriveKeys: (masterPassword: string) => EncryptionKeys
 			getAllServices: () => Promise<ServiceInfo[] | string>
 			getService: (
 				serviceId: string,
@@ -14,6 +15,7 @@ declare global {
 			insertService: (serviceName: string) => Promise<string | void>
 			updateService: (serviceId: string, serviceName: string) => Promise<string | void>
 			deleteService: (serviceId: string) => Promise<string | void>
+			checkIfAnyAccountsExist: () => Promise<boolean | string>
 			addAccountInfo: (
 				newAccount: InsertAccount,
 				keys: EncryptionKeys

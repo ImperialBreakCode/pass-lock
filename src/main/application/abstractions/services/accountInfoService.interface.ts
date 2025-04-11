@@ -9,6 +9,7 @@ export type InsertAccount = {
 }
 
 interface IAccountInfoService {
+	checkIfAnyAccountsExist: () => Promise<boolean>
 	getOneAccount: (
 		serviceId: string,
 		accountId: string,

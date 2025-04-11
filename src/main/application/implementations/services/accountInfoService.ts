@@ -20,6 +20,12 @@ class AccountInfoService implements IAccountInfoService {
 		@inject(AccountEncryption) private readonly encryptor: IAccountEncryption
 	) {}
 
+	public async checkIfAnyAccountsExist(): Promise<boolean> {
+		const encryptedAccount = await this.accountInfoRepo.getFirst()
+
+		return encryptedAccount ? true : false
+	}
+
 	public async getOneAccount(
 		serviceId: string,
 		accountId: string,

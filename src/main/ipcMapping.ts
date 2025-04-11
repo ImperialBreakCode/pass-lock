@@ -9,11 +9,13 @@ import { appPaths } from './constants/paths'
 import path from 'path'
 import { type AppUpdater } from 'electron-updater'
 import EncryptionKeys from './application/models/encryptionKeys.type'
+import Encrypton from './application/implementations/encryption/encryption'
 
 export function mapToIpc(ipcMain: IpcMain, container: DependencyContainer) {
 	mapHelperService(ipcMain)
 	mapAccountCollection(ipcMain, container)
 	mapAccountInfo(ipcMain, container)
+	mapEncyrption(ipcMain, container)
 }
 
 function mapHelperService(ipcMain: IpcMain) {
@@ -33,6 +35,16 @@ function mapHelperService(ipcMain: IpcMain) {
 		const passPath = path.join(appPaths.mainDataPath, appPaths.passwordStorage)
 
 		shell.openPath(passPath)
+	})
+}
+
+function mapEncyrption(ipcMain: IpcMain, container: DependencyContainer) {
+	ipcMain.on('getEncryptionKeys', (e, masterPassword: string) => {
+		const encnryptionService = container.resolve(Encrypton)
+
+		const keys = encnryptionService.deriveKeys(masterPassword)
+
+		e.returnValue = keys
 	})
 }
 
@@ -97,6 +109,15 @@ function mapAccountCollection(ipcMain: IpcMain, container: DependencyContainer) 
 }
 
 function mapAccountInfo(ipcMain: IpcMain, container: DependencyContainer) {
+	ipcMain.handle('checkIfAnyAccountsExist', async (): Promise<boolean | string> => {
+		const accInfoService = container.resolve(AccountInfoService)
+		try {
+			return await accInfoService.checkIfAnyAccountsExist()
+		} catch (error) {
+			return (error as Error).message
+		}
+	})
+
 	ipcMain.handle(
 		'addAccountInfo',
 		async (_, newAccount: InsertAccount, keys: EncryptionKeys): Promise<string | void> => {

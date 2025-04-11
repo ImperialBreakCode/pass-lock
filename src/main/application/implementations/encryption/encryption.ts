@@ -1,7 +1,10 @@
 import IEncryption from '../../abstractions/encryption/encryption.interface'
-import { createCipheriv, createDecipheriv, createHmac, pbkdf2Sync, randomBytes } from 'crypto'
+import { createCipheriv, createDecipheriv, createHash, createHmac, pbkdf2Sync, randomBytes } from 'crypto'
 import { encryptionMessages } from '../../../constants/messages'
-import { injectable } from 'tsyringe'
+import { inject, injectable } from 'tsyringe'
+import EncryptionKeys from '../../models/encryptionKeys.type'
+import type IApplicationModelFactory from '../../abstractions/factories/applicationModelFactory.interface'
+import ApplicationModelFactory from '../factories/applicationModelFactory'
 
 export class EncryptonError extends Error {
 	constructor(msg: string) {
@@ -13,6 +16,8 @@ export class EncryptonError extends Error {
 
 @injectable()
 class Encrypton implements IEncryption {
+	private readonly modelFactory: IApplicationModelFactory
+
 	private readonly SALT_LENGTH = 16
 	private readonly IV_LENGTH = 16
 	private readonly KEY_LENGTH = 32
@@ -22,9 +27,21 @@ class Encrypton implements IEncryption {
 	private key: string
 	private hmacSecret: string
 
-	constructor() {
+	constructor(@inject(ApplicationModelFactory) modelFactory: IApplicationModelFactory) {
+		this.modelFactory = modelFactory
 		this.key = ''
 		this.hmacSecret = ''
+	}
+
+	public deriveKeys(masterPassword: string): EncryptionKeys {
+		const passwordBuffer = Buffer.from(masterPassword, 'utf8')
+		const salt = createHash('sha256').update(masterPassword).digest();
+
+		const derived = pbkdf2Sync(passwordBuffer, salt, 150_000, 64, 'sha512')
+		const key = derived.subarray(0, 32).toString('base64')
+		const hmacSecret = derived.subarray(32, 64).toString('base64')
+
+		return this.modelFactory.createEncryptionKeys(key, hmacSecret)
 	}
 
 	public generateFinalKey(key: string, saltBuffer: Buffer): Buffer {

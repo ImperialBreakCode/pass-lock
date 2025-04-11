@@ -13,6 +13,10 @@ const getPaths = (): { passwordStorage: string; keysStorage: string } => {
 	return ipcRenderer.sendSync('getPaths')
 }
 
+const deriveKeys = (masterPassword: string): EncryptionKeys => {
+	return ipcRenderer.sendSync('getEncryptionKeys', masterPassword)
+}
+
 const getAllServices = async (): Promise<ServiceInfo[] | string> => {
 	return await ipcRenderer.invoke('getAllServices')
 }
@@ -34,6 +38,10 @@ const updateService = async (serviceId: string, serviceName: string): Promise<st
 
 const deleteService = async (serviceId: string): Promise<string | void> => {
 	return await ipcRenderer.invoke('deleteService', serviceId)
+}
+
+const checkIfAnyAccountsExist = async (): Promise<boolean | string> => {
+	return await ipcRenderer.invoke('checkIfAnyAccountsExist')
 }
 
 const addAccountInfo = async (
@@ -67,11 +75,13 @@ const openStorageFolder = (): void => {
 const api = {
 	getPaths,
 	getAppVersion,
+	deriveKeys,
 	getAllServices,
 	getService,
 	insertService,
 	updateService,
 	deleteService,
+	checkIfAnyAccountsExist,
 	addAccountInfo,
 	updateAccountInfo,
 	deleteAccountInfo,

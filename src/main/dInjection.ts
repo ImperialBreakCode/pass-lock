@@ -15,6 +15,8 @@ import IAccountInfoService from './application/abstractions/services/accountInfo
 import AccountInfoService from './application/implementations/services/accountInfoService'
 import IStartupManager from './application/abstractions/startup/startupManager.interface'
 import StartupManager from './application/implementations/startup/startupManager'
+import IApplicationModelFactory from './application/abstractions/factories/applicationModelFactory.interface'
+import ApplicationModelFactory from './application/implementations/factories/applicationModelFactory'
 
 export function getDiContainer(): DependencyContainer {
 	// data layer
@@ -31,6 +33,11 @@ export function getDiContainer(): DependencyContainer {
 	})
 
 	// application layer
+
+	container.register<IApplicationModelFactory>(ApplicationModelFactory, {
+		useClass: ApplicationModelFactory
+	})
+
 	container.register<IEncryption>(Encrypton, {
 		useClass: Encrypton
 	})

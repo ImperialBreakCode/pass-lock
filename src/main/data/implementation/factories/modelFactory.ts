@@ -1,7 +1,6 @@
 import { injectable } from 'tsyringe'
 import IModelFactory from '../../abstraction/factories/modelFactory.interface'
 import AccountInfo from '../../models/accountInfo.type'
-import EncyrptionKeys from '../../models/encryptionKeys.type'
 import ServiceInfo from '../../models/serviceInfo.type'
 import 'reflect-metadata'
 
@@ -21,13 +20,6 @@ class ModelFactory implements IModelFactory {
 			id: crypto.randomUUID(),
 			name: serviceName,
 			accounts: []
-		}
-	}
-
-	public createKeys(key: string, hmacSecret: string): EncyrptionKeys {
-		return {
-			encryptionKey: key,
-			hmacKey: hmacSecret
 		}
 	}
 }
