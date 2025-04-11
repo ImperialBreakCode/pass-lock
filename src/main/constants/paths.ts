@@ -1,7 +1,7 @@
-//import { app } from 'electron'
-import path from 'path'
+import { app } from 'electron'
+//import path from 'path'
 
 export const appPaths = {
-	mainDataPath: path.join(process.cwd(), '..', 'passlocktestdata'),
+	mainDataPath: app.getPath('userData'),
 	passwordStorage: 'passLockStorage'
 }
