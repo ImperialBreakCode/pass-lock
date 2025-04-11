@@ -1,6 +1,6 @@
 import DataCard from '@/components/settings/DataCard'
 import PasswordCard from '@/components/settings/PasswordCard'
-import SetMasterPasswordDialog from '@/components/settings/SetMasterPasswordDialog'
+import SetMasterPasswordForm from '@/components/settings/SetMasterPasswordForm'
 import PageHeader from '@/elements/PageHeader'
 import PageWrapper from '@/elements/PageWrapper'
 import SideSheet from '@/elements/SideSheet'
@@ -17,7 +17,7 @@ function Settings() {
 				title="Set Master Password"
 				description={`Once you've set your master password, you'll need to add your first account information for the password to be saved and used.`}
 			>
-				<SetMasterPasswordDialog onSuccessfullSubmit={() => setMasterPasswordOpen(false)} />
+				<SetMasterPasswordForm onSuccessfullSubmit={() => setMasterPasswordOpen(false)} />
 			</SideSheet>
 
 			<PageHeader pageTitle="Settings" />

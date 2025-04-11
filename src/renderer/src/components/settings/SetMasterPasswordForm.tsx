@@ -8,7 +8,7 @@ import { Input } from '../ui/input'
 import { KeysContext } from '@/contexts/KeysContextProvider'
 import { Button } from '../ui/button'
 
-interface SetMasterPasswordDialogProps {
+interface SetMasterPasswordFormProps {
 	onSuccessfullSubmit: () => void
 }
 
@@ -25,7 +25,7 @@ const formSchema = z
 		path: ['confirmPassword']
 	})
 
-function SetMasterPasswordDialog({ onSuccessfullSubmit }: SetMasterPasswordDialogProps) {
+function SetMasterPasswordForm({ onSuccessfullSubmit }: SetMasterPasswordFormProps) {
 	const [, setKeys] = useContext(KeysContext)
 
 	const form = useForm<z.infer<typeof formSchema>>({
@@ -71,4 +71,4 @@ function SetMasterPasswordDialog({ onSuccessfullSubmit }: SetMasterPasswordDialo
 	)
 }
 
-export default SetMasterPasswordDialog
+export default SetMasterPasswordForm
