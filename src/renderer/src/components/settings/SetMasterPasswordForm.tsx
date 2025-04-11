@@ -65,7 +65,7 @@ function SetMasterPasswordForm({ onSuccessfullSubmit }: SetMasterPasswordFormPro
 						</FormInputWrapper>
 					)}
 				/>
-				<Button type="submit">Set Master Password</Button>
+				<Button type="submit">Set master password</Button>
 			</form>
 		</Form>
 	)
