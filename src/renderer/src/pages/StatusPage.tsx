@@ -12,7 +12,7 @@ import { useContext, useState } from 'react'
 
 function StatusPage() {
 	const [keys, setKeys] = useContext(KeysContext)
-	const [masterPasswordExists] = useContext(MasterPasswordExistsContext)
+	const [masterPasswordExists, setMasterPasswordExists] = useContext(MasterPasswordExistsContext)
 
 	const [unlockSheetOpen, setUnlockSheetOpen] = useState(false)
 
@@ -40,7 +40,15 @@ function StatusPage() {
 				<div className="mb-2">
 					{masterPasswordExists ? (
 						<StatusCard
-							lockStorage={() => setKeys(null)}
+							lockStorage={async () => {
+								setKeys(null)
+
+								const result = await window.api.checkIfAnyAccountsExist()
+
+								if (typeof result === 'boolean' && !result) {
+									setMasterPasswordExists(false)
+								}
+							}}
 							unlocked={keys !== null}
 							openUnlockSheet={() => setUnlockSheetOpen(true)}
 						/>

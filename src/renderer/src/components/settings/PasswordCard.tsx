@@ -14,7 +14,7 @@ function PasswordCard({ openMasterPasswordDialogue }: PasswordCardProps) {
 				<Separator />
 				<CardDescription className="mt-2">
 					<Button onClick={() => openMasterPasswordDialogue()} variant={'secondary'}>
-						Set Master Password
+						Set master password
 					</Button>
 				</CardDescription>
 			</CardHeader>
