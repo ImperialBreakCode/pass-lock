@@ -1,12 +1,17 @@
 import { inject, injectable } from 'tsyringe'
-import type IPasswordStorage from '../../abstraction/fileStorage/passwordStorage.interface'
 import IServiceRepository from '../../abstraction/repository/serviceRepository.interface'
 import ServiceInfo from '../../models/serviceInfo.type'
-import PasswordManager from '../managers/passwordManager'
+import FileStorageFactory from '../factories/fileStorageFactory'
+import type IFileStorageFactory from '../../abstraction/factories/fileStorageFactory.interface'
+import IPasswordStorage from '../../abstraction/fileStorage/passwordStorage.interface'
 
 @injectable()
 class ServiceRepository implements IServiceRepository {
-	constructor(@inject(PasswordManager) private readonly passwordStorage: IPasswordStorage) {}
+	private readonly passwordStorage: IPasswordStorage
+
+	constructor(@inject(FileStorageFactory) storageFactory: IFileStorageFactory) {
+		this.passwordStorage = storageFactory.createPasswordFileStorage()
+	}
 
 	public async getAll(): Promise<ServiceInfo[]> {
 		return await this.passwordStorage.readData()
@@ -26,6 +31,20 @@ class ServiceRepository implements IServiceRepository {
 		}
 
 		data.push(service)
+		this.passwordStorage.save(data)
+
+		return true
+	}
+
+	public async insertMany(services: ServiceInfo[]): Promise<boolean> {
+		const data = await this.passwordStorage.readData()
+		const existingIds = new Set(data.map((s) => s.id))
+
+		if (services.some((s) => existingIds.has(s.id))) {
+			return false
+		}
+
+		data.push(...services)
 		this.passwordStorage.save(data)
 
 		return true

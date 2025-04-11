@@ -3,5 +3,6 @@ export const routes = {
 	status: '/',
 	vault: '/vault',
 	accountInfos: 'accountInfos',
-	about: '/about'
+	about: '/about',
+	settings: '/settings'
 }

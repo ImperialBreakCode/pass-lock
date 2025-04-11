@@ -3,6 +3,7 @@ import { electronAPI } from '@electron-toolkit/preload'
 import ServiceInfo from '../main/data/models/serviceInfo.type'
 import { InsertAccount } from '../main/application/abstractions/services/accountInfoService.interface'
 import AccountInfo from '../main/data/models/accountInfo.type'
+import EncryptionKeys from '../main/application/models/encryptionKeys.type'
 
 const getAppVersion = (): string => {
 	return ipcRenderer.sendSync('getAppVersion')
@@ -12,16 +13,19 @@ const getPaths = (): { passwordStorage: string; keysStorage: string } => {
 	return ipcRenderer.sendSync('getPaths')
 }
 
-const checkForKeys = (): boolean => {
-	return ipcRenderer.sendSync('checkForKeys')
+const deriveKeys = (masterPassword: string): EncryptionKeys => {
+	return ipcRenderer.sendSync('getEncryptionKeys', masterPassword)
 }
 
 const getAllServices = async (): Promise<ServiceInfo[] | string> => {
 	return await ipcRenderer.invoke('getAllServices')
 }
 
-const getService = async (serviceId: string): Promise<ServiceInfo | undefined | string> => {
-	return await ipcRenderer.invoke('getService', serviceId)
+const getService = async (
+	serviceId: string,
+	keys: EncryptionKeys | null
+): Promise<ServiceInfo | undefined | string> => {
+	return await ipcRenderer.invoke('getService', serviceId, keys)
 }
 
 const insertService = async (serviceName: string): Promise<string | void> => {
@@ -36,27 +40,43 @@ const deleteService = async (serviceId: string): Promise<string | void> => {
 	return await ipcRenderer.invoke('deleteService', serviceId)
 }
 
-const addAccountInfo = async (newAccount: InsertAccount): Promise<string | void> => {
-	return await ipcRenderer.invoke('addAccountInfo', newAccount)
+const checkIfAnyAccountsExist = async (): Promise<boolean | string> => {
+	return await ipcRenderer.invoke('checkIfAnyAccountsExist')
+}
+
+const addAccountInfo = async (
+	newAccount: InsertAccount,
+	keys: EncryptionKeys
+): Promise<string | void> => {
+	return await ipcRenderer.invoke('addAccountInfo', newAccount, keys)
 }
 
 const updateAccountInfo = async (
 	account: AccountInfo,
-	serviceId: string
+	serviceId: string,
+	keys: EncryptionKeys
 ): Promise<string | void> => {
-	return await ipcRenderer.invoke('updateAccountInfo', account, serviceId)
+	return await ipcRenderer.invoke('updateAccountInfo', account, serviceId, keys)
 }
 
 const deleteAccountInfo = async (accountId: string, serviceId: string): Promise<string | void> => {
 	return await ipcRenderer.invoke('deleteAccountInfo', accountId, serviceId)
 }
 
-const installUpdate = (): void => {
-	ipcRenderer.send('install-update')
+const tryDecription = async (keys: EncryptionKeys): Promise<string | void> => {
+	return await ipcRenderer.invoke('tryDecryption', keys)
 }
 
-const openKeysFolder = (): void => {
-	ipcRenderer.send('open-keys-folder')
+const exportData = async (keys: EncryptionKeys): Promise<string | void> => {
+	return await ipcRenderer.invoke('exportData', keys)
+}
+
+const importData = async (keys: EncryptionKeys): Promise<string | void> => {
+	return await ipcRenderer.invoke('importData', keys)
+}
+
+const installUpdate = (): void => {
+	ipcRenderer.send('install-update')
 }
 
 const openStorageFolder = (): void => {
@@ -67,15 +87,19 @@ const openStorageFolder = (): void => {
 const api = {
 	getPaths,
 	getAppVersion,
-	checkForKeys,
+	deriveKeys,
 	getAllServices,
 	getService,
 	insertService,
 	updateService,
 	deleteService,
+	checkIfAnyAccountsExist,
 	addAccountInfo,
 	updateAccountInfo,
 	deleteAccountInfo,
+	tryDecription,
+	exportData,
+	importData,
 
 	onUpdateAvailable: (callback: () => void) => ipcRenderer.on('update-available', callback),
 
@@ -87,7 +111,6 @@ const api = {
 	onUpdateError: (callback: () => void) => ipcRenderer.on('update-error', callback),
 
 	installUpdate,
-	openKeysFolder,
 	openStorageFolder
 }
 

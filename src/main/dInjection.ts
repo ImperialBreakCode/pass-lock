@@ -1,12 +1,8 @@
 import { DependencyContainer, container } from 'tsyringe'
 import IFileStorageFactory from './data/abstraction/factories/fileStorageFactory.interface'
 import FileStorageFactory from './data/implementation/factories/fileStorageFactory'
-import IPasswordStorage from './data/abstraction/fileStorage/passwordStorage.interface'
-import PasswordManager from './data/implementation/managers/passwordManager'
 import IAccountRepository from './data/abstraction/repository/accountRepository.interface'
 import AccountRepository from './data/implementation/repository/accountRepository'
-import IKeyManager from './data/abstraction/managers/keyManager.interface'
-import KeyManager from './data/implementation/managers/keyManager'
 import IServiceRepository from './data/abstraction/repository/serviceRepository.interface'
 import ServiceRepository from './data/implementation/repository/serviceRepository'
 import IEncryption from './application/abstractions/encryption/encryption.interface'
@@ -19,23 +15,15 @@ import IAccountInfoService from './application/abstractions/services/accountInfo
 import AccountInfoService from './application/implementations/services/accountInfoService'
 import IStartupManager from './application/abstractions/startup/startupManager.interface'
 import StartupManager from './application/implementations/startup/startupManager'
-import IPasswordStorageObserver from './data/abstraction/fileStorage/passwordStorageObserver.interface'
-import PasswordStorageObserver from './application/implementations/passwordStorageObserver'
-import HelperService from './application/implementations/services/helperService'
-import IHelperService from './application/abstractions/services/helperService.interface'
+import IApplicationModelFactory from './application/abstractions/factories/applicationModelFactory.interface'
+import ApplicationModelFactory from './application/implementations/factories/applicationModelFactory'
+import IDataManagementService from './application/abstractions/services/dataManagementService.interface'
+import DataManagementService from './application/implementations/services/dataManagementService'
 
 export function getDiContainer(): DependencyContainer {
 	// data layer
 	container.register<IFileStorageFactory>(FileStorageFactory, {
 		useClass: FileStorageFactory
-	})
-
-	container.register<IPasswordStorage>(PasswordManager, {
-		useClass: PasswordManager
-	})
-
-	container.register<IKeyManager>(KeyManager, {
-		useClass: KeyManager
 	})
 
 	container.register<IAccountRepository>(AccountRepository, {
@@ -47,6 +35,11 @@ export function getDiContainer(): DependencyContainer {
 	})
 
 	// application layer
+
+	container.register<IApplicationModelFactory>(ApplicationModelFactory, {
+		useClass: ApplicationModelFactory
+	})
+
 	container.register<IEncryption>(Encrypton, {
 		useClass: Encrypton
 	})
@@ -63,12 +56,8 @@ export function getDiContainer(): DependencyContainer {
 		useClass: AccountInfoService
 	})
 
-	container.register<IPasswordStorageObserver>(PasswordStorageObserver, {
-		useClass: PasswordStorageObserver
-	})
-
-	container.register<IHelperService>(HelperService, {
-		useClass: HelperService
+	container.register<IDataManagementService>(DataManagementService, {
+		useClass: DataManagementService
 	})
 
 	container.register<IStartupManager>(StartupManager, {

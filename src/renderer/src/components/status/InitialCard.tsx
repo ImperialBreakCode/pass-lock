@@ -14,26 +14,18 @@ function InitialCard() {
 				<CardDescription>
 					Secure storage keeps all your account information safe using encryption. It is
 					stored in data.json file which can be found at{' '}
-					<b>{window.api.getPaths().passwordStorage}</b>. Password lock generates keys
-					which unlock the storage automaticaly. You can find them in another data.json
-					file in <b>{window.api.getPaths().keysStorage}</b>. To stop the automatic
-					unlocking, remove the data.json file from its folder.
+					<b>{window.api.getPaths().passwordStorage}</b>. Password lock uses master
+					password to encrypt your data. You can setup your master password in settings.
 					<br />
 					<br />
 					<b>
-						Store the keys file somewhere safe. If you lose them you will not be able to
-						recover your data.
+						Write down your master password and store it somewhere safe. If you lose it,
+						you will not be able to recover your data.
 					</b>
 					<div className="mt-5 flex">
 						<Button
 							variant={'secondary'}
-							className="ms-auto me-3"
-							onClick={() => window.api.openKeysFolder()}
-						>
-							Open keys folder
-						</Button>
-						<Button
-							variant={'secondary'}
+							className="ms-auto"
 							onClick={() => window.api.openStorageFolder()}
 						>
 							Open storage folder

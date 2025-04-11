@@ -1,4 +1,5 @@
 import AccountInfo from '../../../data/models/accountInfo.type'
+import EncryptionKeys from '../../models/encryptionKeys.type'
 
 export type InsertAccount = {
 	serviceId: string
@@ -8,9 +9,18 @@ export type InsertAccount = {
 }
 
 interface IAccountInfoService {
-	getOneAccount: (serviceId: string, accountId: string) => Promise<AccountInfo | undefined>
-	insertOneAccount: (account: InsertAccount) => Promise<void | string>
-	updateOneAccount: (account: AccountInfo, serviceId: string) => Promise<void | string>
+	checkIfAnyAccountsExist: () => Promise<boolean>
+	getOneAccount: (
+		serviceId: string,
+		accountId: string,
+		keys: EncryptionKeys | null
+	) => Promise<AccountInfo | undefined>
+	insertOneAccount: (account: InsertAccount, keys: EncryptionKeys) => Promise<void | string>
+	updateOneAccount: (
+		account: AccountInfo,
+		serviceId: string,
+		keys: EncryptionKeys
+	) => Promise<void | string>
 	deleteAccount: (accountId: string, serviceId: string) => Promise<void | string>
 }
 

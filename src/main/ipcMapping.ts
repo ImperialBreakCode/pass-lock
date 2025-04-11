@@ -1,6 +1,5 @@
 import { BrowserWindow, IpcMain, app, dialog, shell } from 'electron'
 import { DependencyContainer } from 'tsyringe'
-import HelperService from './application/implementations/services/helperService'
 import AccountCollectionService from './application/implementations/services/accountCollectionService'
 import ServiceInfo from './data/models/serviceInfo.type'
 import AccountInfoService from './application/implementations/services/accountInfoService'
@@ -9,44 +8,49 @@ import AccountInfo from './data/models/accountInfo.type'
 import { appPaths } from './constants/paths'
 import path from 'path'
 import { type AppUpdater } from 'electron-updater'
+import EncryptionKeys from './application/models/encryptionKeys.type'
+import Encrypton from './application/implementations/encryption/encryption'
+import DataManagementService from './application/implementations/services/dataManagementService'
 
-export function mapToIpc(ipcMain: IpcMain, container: DependencyContainer) {
-	mapHelperService(ipcMain, container)
+export function mapToIpc(
+	ipcMain: IpcMain,
+	container: DependencyContainer,
+	activeMainWindow: BrowserWindow | null
+) {
+	mapHelperService(ipcMain)
 	mapAccountCollection(ipcMain, container)
 	mapAccountInfo(ipcMain, container)
+	mapEncyrption(ipcMain, container)
+	mapDataManagement(ipcMain, container, activeMainWindow)
 }
 
-function mapHelperService(ipcMain: IpcMain, container: DependencyContainer) {
-	ipcMain.on('checkForKeys', (e) => {
-		const helperService = container.resolve(HelperService)
-
-		e.returnValue = helperService.checkForKeys()
-	})
-
+function mapHelperService(ipcMain: IpcMain) {
 	ipcMain.on('getAppVersion', (e) => {
 		e.returnValue = app.getVersion()
 	})
 
 	ipcMain.on('getPaths', (e) => {
 		const passPath = path.join(appPaths.mainDataPath, appPaths.passwordStorage)
-		const keysPath = path.join(appPaths.mainDataPath, appPaths.keysStorage)
 
 		e.returnValue = {
-			passwordStorage: passPath,
-			keysStorage: keysPath
+			passwordStorage: passPath
 		}
-	})
-
-	ipcMain.on('open-keys-folder', () => {
-		const keysPath = path.join(appPaths.mainDataPath, appPaths.keysStorage)
-
-		shell.openPath(keysPath)
 	})
 
 	ipcMain.on('open-storage-folder', () => {
 		const passPath = path.join(appPaths.mainDataPath, appPaths.passwordStorage)
 
 		shell.openPath(passPath)
+	})
+}
+
+function mapEncyrption(ipcMain: IpcMain, container: DependencyContainer) {
+	ipcMain.on('getEncryptionKeys', (e, masterPassword: string) => {
+		const encnryptionService = container.resolve(Encrypton)
+
+		const keys = encnryptionService.deriveKeys(masterPassword)
+
+		e.returnValue = keys
 	})
 }
 
@@ -63,10 +67,14 @@ function mapAccountCollection(ipcMain: IpcMain, container: DependencyContainer) 
 
 	ipcMain.handle(
 		'getService',
-		async (_, serviceId: string): Promise<ServiceInfo | undefined | string> => {
+		async (
+			_,
+			serviceId: string,
+			keys: EncryptionKeys | null
+		): Promise<ServiceInfo | undefined | string> => {
 			const accCollectionService = container.resolve(AccountCollectionService)
 			try {
-				return await accCollectionService.getOne(serviceId)
+				return await accCollectionService.getOne(serviceId, keys)
 			} catch (error) {
 				return (error as Error).message
 			}
@@ -107,28 +115,40 @@ function mapAccountCollection(ipcMain: IpcMain, container: DependencyContainer) 
 }
 
 function mapAccountInfo(ipcMain: IpcMain, container: DependencyContainer) {
+	ipcMain.handle('checkIfAnyAccountsExist', async (): Promise<boolean | string> => {
+		const accInfoService = container.resolve(AccountInfoService)
+		try {
+			return await accInfoService.checkIfAnyAccountsExist()
+		} catch (error) {
+			return (error as Error).message
+		}
+	})
+
 	ipcMain.handle(
 		'addAccountInfo',
-		async (_, newAccount: InsertAccount): Promise<string | void> => {
+		async (_, newAccount: InsertAccount, keys: EncryptionKeys): Promise<string | void> => {
 			const accInfoService = container.resolve(AccountInfoService)
 
 			try {
-				return await accInfoService.insertOneAccount(newAccount)
+				return await accInfoService.insertOneAccount(newAccount, keys)
 			} catch (error) {
 				return (error as Error).message
 			}
 		}
 	)
 
-	ipcMain.handle('updateAccountInfo', async (_, account: AccountInfo, serviceId: string) => {
-		const accInfoService = container.resolve(AccountInfoService)
+	ipcMain.handle(
+		'updateAccountInfo',
+		async (_, account: AccountInfo, serviceId: string, keys: EncryptionKeys) => {
+			const accInfoService = container.resolve(AccountInfoService)
 
-		try {
-			return await accInfoService.updateOneAccount(account, serviceId)
-		} catch (error) {
-			return (error as Error).message
+			try {
+				return await accInfoService.updateOneAccount(account, serviceId, keys)
+			} catch (error) {
+				return (error as Error).message
+			}
 		}
-	})
+	)
 
 	ipcMain.handle(
 		'deleteAccountInfo',
@@ -142,6 +162,62 @@ function mapAccountInfo(ipcMain: IpcMain, container: DependencyContainer) {
 			}
 		}
 	)
+}
+
+function mapDataManagement(
+	ipcMain: IpcMain,
+	container: DependencyContainer,
+	activeMainWindow: BrowserWindow | null
+) {
+	ipcMain.handle('tryDecryption', async (_, keys: EncryptionKeys): Promise<string | void> => {
+		const dataService = container.resolve(DataManagementService)
+
+		try {
+			return await dataService.tryDecription(keys)
+		} catch (error) {
+			return (error as Error).message
+		}
+	})
+
+	ipcMain.handle('exportData', async (_, keys: EncryptionKeys): Promise<string | void> => {
+		const { canceled, filePath } = await dialog.showSaveDialog(activeMainWindow!, {
+			title: 'Save Your File',
+			defaultPath: 'decryptedAccountInfo.json',
+			buttonLabel: 'Export Data',
+			filters: [{ name: 'JSON Files', extensions: ['json'] }]
+		})
+
+		if (canceled) {
+			return
+		}
+
+		const dataService = container.resolve(DataManagementService)
+		try {
+			return await dataService.exportAndDecryptData(keys, filePath)
+		} catch (error) {
+			return (error as Error).message
+		}
+	})
+
+	ipcMain.handle('importData', async (_, keys: EncryptionKeys): Promise<string | void> => {
+		const { canceled, filePaths } = await dialog.showOpenDialog(activeMainWindow!, {
+			title: 'Select a File',
+			properties: ['openFile'],
+			filters: [{ name: 'JSON Files', extensions: ['json'] }]
+		})
+
+		if (canceled) {
+			return
+		}
+
+		const dataService = container.resolve(DataManagementService)
+
+		try {
+			return await dataService.importAndEncryptData(keys, filePaths[0])
+		} catch (error) {
+			return (error as Error).message
+		}
+	})
 }
 
 export function mapAutoUpdater(

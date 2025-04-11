@@ -7,6 +7,7 @@ import IAccountCollectionService from '../../abstractions/services/accountCollec
 import ServiceRepository from '../../../data/implementation/repository/serviceRepository'
 import ModelFactory from '../../../data/implementation/factories/modelFactory'
 import AccountEncryption from '../encryption/accountEncryption'
+import EncryptionKeys from '../../models/encryptionKeys.type'
 
 @injectable()
 class AccountCollectionService implements IAccountCollectionService {
@@ -20,11 +21,14 @@ class AccountCollectionService implements IAccountCollectionService {
 		return await this.accountCollectionRepo.getAll()
 	}
 
-	public async getOne(serviceId: string): Promise<ServiceInfo | undefined> {
+	public async getOne(
+		serviceId: string,
+		keys: EncryptionKeys | null
+	): Promise<ServiceInfo | undefined> {
 		const service = await this.accountCollectionRepo.getOne(serviceId)
 
-		if (service) {
-			await this.accountEncryptor.decryptMultipleAccounts(service.accounts)
+		if (service && keys) {
+			await this.accountEncryptor.decryptMultipleAccounts(service.accounts, keys)
 		}
 
 		return service

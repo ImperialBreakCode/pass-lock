@@ -6,11 +6,11 @@ import type IAccountEncryption from '../../abstractions/encryption/accountEncryp
 import IAccountInfoService, {
 	InsertAccount
 } from '../../abstractions/services/accountInfoService.interface'
-import { encryptionMessages } from '../../../constants/messages'
 import { EncryptonError } from '../encryption/encryption'
 import ModelFactory from '../../../data/implementation/factories/modelFactory'
 import AccountRepository from '../../../data/implementation/repository/accountRepository'
 import AccountEncryption from '../encryption/accountEncryption'
+import EncryptionKeys from '../../models/encryptionKeys.type'
 
 @injectable()
 class AccountInfoService implements IAccountInfoService {
@@ -20,33 +20,37 @@ class AccountInfoService implements IAccountInfoService {
 		@inject(AccountEncryption) private readonly encryptor: IAccountEncryption
 	) {}
 
+	public async checkIfAnyAccountsExist(): Promise<boolean> {
+		const encryptedAccount = await this.accountInfoRepo.getFirst()
+
+		return encryptedAccount ? true : false
+	}
+
 	public async getOneAccount(
 		serviceId: string,
-		accountId: string
+		accountId: string,
+		keys: EncryptionKeys | null
 	): Promise<AccountInfo | undefined> {
 		const encryptedAccount = await this.accountInfoRepo.getOne(serviceId, accountId)
 
-		if (encryptedAccount) {
-			await this.encryptor.decryptSingleAccount(encryptedAccount)
+		if (encryptedAccount && keys) {
+			await this.encryptor.decryptSingleAccount(encryptedAccount, keys)
 		}
 
 		return encryptedAccount
 	}
 
-	public async insertOneAccount(account: InsertAccount): Promise<string | void> {
-		const testDecryption = await this.accountInfoRepo.getFirst()
-		const testResult = await this.testDecryption(testDecryption)
-		if (testResult) {
-			return testResult
-		}
-
+	public async insertOneAccount(
+		account: InsertAccount,
+		keys: EncryptionKeys
+	): Promise<string | void> {
 		const newAccount = this.modelFactory.createAccount(
 			account.username,
 			account.password,
 			account.moreInfo
 		)
 
-		const encryptionResult = await this.tryEncyrptData(newAccount)
+		const encryptionResult = await this.tryEncyrptData(newAccount, keys)
 		if (encryptionResult) {
 			return encryptionResult
 		}
@@ -58,19 +62,18 @@ class AccountInfoService implements IAccountInfoService {
 		}
 	}
 
-	public async updateOneAccount(account: AccountInfo, serviceId: string): Promise<string | void> {
+	public async updateOneAccount(
+		account: AccountInfo,
+		serviceId: string,
+		keys: EncryptionKeys
+	): Promise<string | void> {
 		const accountForUpdate = await this.accountInfoRepo.getOne(serviceId, account.id)
 
 		if (!accountForUpdate) {
 			return 'Account does not exist.'
 		}
 
-		const testResult = await this.testDecryption(accountForUpdate)
-		if (testResult) {
-			return testResult
-		}
-
-		const encryptionResult = await this.tryEncyrptData(account)
+		const encryptionResult = await this.tryEncyrptData(account, keys)
 		if (encryptionResult) {
 			return encryptionResult
 		}
@@ -89,23 +92,12 @@ class AccountInfoService implements IAccountInfoService {
 		}
 	}
 
-	private async testDecryption(testDecryption: AccountInfo | undefined): Promise<string | void> {
+	private async tryEncyrptData(
+		account: AccountInfo,
+		keys: EncryptionKeys
+	): Promise<string | void> {
 		try {
-			if (testDecryption) {
-				await this.encryptor.decryptSingleAccount(testDecryption)
-			}
-		} catch (error) {
-			if (error instanceof EncryptonError) {
-				return error.message
-			}
-
-			return encryptionMessages.invalidKeys
-		}
-	}
-
-	private async tryEncyrptData(account: AccountInfo): Promise<string | void> {
-		try {
-			await this.encryptor.encryptSingleAccount(account)
+			await this.encryptor.encryptSingleAccount(account, keys)
 		} catch (error) {
 			if (error instanceof EncryptonError) {
 				return error.message

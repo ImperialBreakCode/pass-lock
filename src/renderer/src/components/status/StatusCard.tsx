@@ -1,12 +1,15 @@
 import { ShieldCheck, ShieldOff } from 'lucide-react'
 import { Card, CardDescription, CardHeader, CardTitle } from '../ui/card'
 import { Separator } from '../ui/separator'
+import { Button } from '../ui/button'
 
 interface StatusCardProps {
 	unlocked: boolean
+	openUnlockSheet: () => void
+	lockStorage: () => void
 }
 
-function StatusCard({ unlocked }: StatusCardProps) {
+function StatusCard({ unlocked, openUnlockSheet, lockStorage }: StatusCardProps) {
 	return (
 		<Card className="border-border">
 			<CardHeader>
@@ -25,12 +28,26 @@ function StatusCard({ unlocked }: StatusCardProps) {
 				<CardDescription>
 					{unlocked ? (
 						<>
-							To lock the storage, remove the data.json file containing the locker
-							keys from <b>{window.api.getPaths().keysStorage}</b> and store it
-							somewhere safe.
+							Encryption is turned off. Storage is unlocked.
+							<div className="mt-5 flex">
+								<Button
+									variant={'secondary'}
+									className="ms-auto"
+									onClick={() => lockStorage()}
+								>
+									Lock storage
+								</Button>
+							</div>
 						</>
 					) : (
-						<>Encryption is turned on and storage is locked.</>
+						<>
+							Encryption is turned on and storage is locked.
+							<div className="mt-5 flex">
+								<Button className="ms-auto" onClick={() => openUnlockSheet()}>
+									Unlock
+								</Button>
+							</div>
+						</>
 					)}
 				</CardDescription>
 			</CardHeader>

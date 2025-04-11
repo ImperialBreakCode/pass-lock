@@ -72,7 +72,7 @@ app.whenReady().then(async () => {
 	// my app
 	const appContainer = getDiContainer()
 	await preStart(appContainer)
-	mapToIpc(ipcMain, appContainer)
+	mapToIpc(ipcMain, appContainer, activeMainWin)
 
 	activeMainWin = await createWindow()
 	mapAutoUpdater(activeMainWin, ipcMain, autoUpdater)

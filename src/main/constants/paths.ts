@@ -3,6 +3,5 @@ import { app } from 'electron'
 
 export const appPaths = {
 	mainDataPath: app.getPath('userData'),
-	passwordStorage: 'passLockStorage',
-	keysStorage: 'keys'
+	passwordStorage: 'passLockStorage'
 }

@@ -9,6 +9,7 @@ import { Button } from '../ui/button'
 import { Input } from '../ui/input'
 import { Textarea } from '../ui/textarea'
 import AccountInfo from '@/models/accountInfo.type'
+import { KeysContext } from '@/contexts/KeysContextProvider'
 
 interface AddUpdateAccountFormProps {
 	onSuccessfullSubmit: () => void
@@ -27,6 +28,8 @@ function AddUpdateAccountForm({
 	serviceId,
 	accountToUpdate
 }: AddUpdateAccountFormProps) {
+	const [keys] = useContext(KeysContext)
+
 	const [, setErrors] = useContext(ErrorDialogueContext)
 
 	const form = useForm<z.infer<typeof formSchema>>({
@@ -40,25 +43,31 @@ function AddUpdateAccountForm({
 	})
 
 	const onSubmit = async (data: z.infer<typeof formSchema>) => {
-		let result
+		if (keys) {
+			let result
 
-		if (accountToUpdate) {
-			result = await window.api.updateAccountInfo(
-				{
-					id: accountToUpdate.id,
-					...data
-				},
-				serviceId
-			)
-		} else {
-			result = await window.api.addAccountInfo({
-				...data,
-				serviceId: serviceId
-			})
-		}
+			if (accountToUpdate) {
+				result = await window.api.updateAccountInfo(
+					{
+						id: accountToUpdate.id,
+						...data
+					},
+					serviceId,
+					keys
+				)
+			} else {
+				result = await window.api.addAccountInfo(
+					{
+						...data,
+						serviceId: serviceId
+					},
+					keys
+				)
+			}
 
-		if (typeof result === 'string' && setErrors) {
-			setErrors(result)
+			if (typeof result === 'string' && setErrors) {
+				setErrors(result)
+			}
 		}
 
 		onSuccessfullSubmit()
